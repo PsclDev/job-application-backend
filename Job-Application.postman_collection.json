@@ -1,0 +1,57 @@
+{
+  "info": {
+    "_postman_id": "20f2e5e0-1e8b-42d5-99d8-88d577177d71",
+    "name": "Job-Application",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "6729620"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Check",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  healthCheck {\n      version\n      databaseRunning\n  }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3010/graphql",
+      "type": "string"
+    }
+  ]
+}

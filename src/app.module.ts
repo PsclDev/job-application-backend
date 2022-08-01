@@ -2,13 +2,12 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TerminusModule } from '@nestjs/terminus';
 import { ConfigModule, ConfigService } from '@config';
+import { HealthModule } from './module/health/health.module';
 
 @Module({
   imports: [
     ConfigModule,
-    TerminusModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: true,
       driver: ApolloDriver,
@@ -31,6 +30,7 @@ import { ConfigModule, ConfigService } from '@config';
       }),
       inject: [ConfigService],
     }),
+    HealthModule,
   ],
   controllers: [],
 })

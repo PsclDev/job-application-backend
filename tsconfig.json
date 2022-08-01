@@ -20,8 +20,8 @@
     "paths": {
       "@config": ["config/"],
       "@config/*": ["config/*"],
-      "@modules": ["modules/"],
-      "@modules/*": ["modules/*"]
+      "@module": ["module/"],
+      "@module/*": ["module/*"]
     }
   }
 }

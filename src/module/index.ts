@@ -1,1 +1,1 @@
-export * from './routes';
+export * from './health/health.module';
