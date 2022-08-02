@@ -20,18 +20,18 @@ This is a fun project to use my new learned knowledge of graphql. You can track 
 | Sate | Function              |
 | ---- | --------------------- |
 | ✅   | Create Group          |
-| ❌   | Get all groups        |
-| ❌   | Get group by id       |
-| ❌   | Update group by id    |
-| ❌   | Archive group by id   |
-| ❌   | Unarchive group by id |
-| ❌   | Delete group by id    |
+| ✅   | Get all groups        |
+| ✅   | Get group by id       |
+| ✅   | Update group by id    |
+| ✅   | Archive group by id   |
+| ✅   | Unarchive group by id |
+| ✅   | Delete group by id    |
 
 ### Application
 
 | Sate | Function                      |
 | ---- | ----------------------------- |
-| ✅   | Create Application            |
+| ❌   | Create Application            |
 | ❌   | Get applications by group     |
 | ❌   | Get application by id         |
 | ❌   | Update application by id      |

@@ -21,7 +21,9 @@
       "@config": ["config/"],
       "@config/*": ["config/*"],
       "@module": ["module/"],
-      "@module/*": ["module/*"]
+      "@module/*": ["module/*"],
+      "@util": ["util/"],
+      "@util/*": ["util/*"]
     }
   }
 }

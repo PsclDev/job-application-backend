@@ -4,6 +4,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@config';
 import { HealthModule } from './module/health/health.module';
+import { GroupModule } from './module/group/group.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { HealthModule } from './module/health/health.module';
       inject: [ConfigService],
     }),
     HealthModule,
+    GroupModule,
   ],
   controllers: [],
 })

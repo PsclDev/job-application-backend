@@ -29,6 +29,156 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Group",
+      "item": [
+        {
+          "name": "All",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n    groups {\n        id\n        name\n        isArchived\n    }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "By Id",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query($id: String!) {\n    group(id: $id) {\n        id\n        name\n        isArchived\n    }\n}",
+                "variables": "{\n    \"id\": \"{{group_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "pm.collectionVariables.set(\"group_id\", jsonData.data.createGroup.id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n    createGroup(\n        input: {\n            name:\"Test Group 2\"\n            description: \"test description\"\n            isArchived: true\n        }\n    ) {\n        id\n    }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation($id: String!) {\n    updateGroup(\n        id: $id\n        input: {\n            name:\"Test Group Updated\",\n            isArchived: true\n        }\n    ) {\n        id\n        name\n        isArchived\n    }\n}",
+                "variables": "{\n    \"id\": \"{{group_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Archive",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation($id: String!) {\n    archiveGroup(\n        id: $id\n    )\n}",
+                "variables": "{\n    \"id\": \"{{group_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unarchive",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation($id: String!) {\n    unarchiveGroup(\n        id: $id\n    ) {\n        id\n        name\n        description\n    }\n}",
+                "variables": "{\n    \"id\": \"{{group_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation($id: String!) {\n    deleteGroup(\n        id: $id\n    )\n}",
+                "variables": "{\n    \"id\": \"{{group_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "event": [
@@ -51,6 +201,11 @@
     {
       "key": "base_url",
       "value": "http://localhost:3010/graphql",
+      "type": "string"
+    },
+    {
+      "key": "group_id",
+      "value": "",
       "type": "string"
     }
   ]
