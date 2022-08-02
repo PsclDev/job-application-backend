@@ -50,7 +50,7 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install dependencies 📦
-        run: cd backend && yarn
+        run: yarn
 
       - name: Run linter 👀
         run: yarn lint
