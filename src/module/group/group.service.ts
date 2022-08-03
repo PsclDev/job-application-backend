@@ -32,13 +32,9 @@ export class GroupService {
     this.logger.log('create group');
     this.prettyPrintObject('createGroupInput:', input);
 
-    const { name, description, isArchived } = input;
-
     const group = this.groupRepo.create({
       id: generateId<GroupEntity>(this.groupRepo),
-      name,
-      description,
-      isArchived,
+      ...input,
     });
 
     return await this.groupRepo.save(group);

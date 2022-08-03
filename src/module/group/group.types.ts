@@ -18,7 +18,7 @@ export class GroupType implements GroupBaseInterface {
   @Field()
   name: string;
 
-  @Field()
+  @Field({ nullable: true })
   description: string;
 
   @Field()
