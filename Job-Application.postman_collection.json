@@ -41,7 +41,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "query {\n    groups {\n        id\n        name\n        isArchived\n    }\n}",
+                "query": "query {\n    groups {\n        id\n        name\n        description\n        applications {\n            id\n            name\n        }\n        isArchived\n        createdAt\n        updatedAt\n    }\n}",
                 "variables": ""
               }
             },
@@ -60,7 +60,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "query($id: String!) {\n    group(id: $id) {\n        id\n        name\n        isArchived\n    }\n}",
+                "query": "query($id: String!) {\n    group(id: $id) {\n        id\n        name\n        description\n        applications {\n            id\n            name\n        }\n        isArchived\n        createdAt\n        updatedAt\n    }\n}",
                 "variables": "{\n    \"id\": \"{{group_id}}\"\n}"
               }
             },
@@ -91,7 +91,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "mutation {\n    createGroup(\n        input: {\n            name:\"Test Group 2\"\n            description: \"test description\"\n            isArchived: true\n        }\n    ) {\n        id\n    }\n}",
+                "query": "mutation {\n    createGroup(\n        input: {\n            name:\"Test Group\"\n            description: \"test description\"\n            isArchived: true\n        }\n    ) {\n        id\n    }\n}",
                 "variables": ""
               }
             },
@@ -179,6 +179,194 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Application",
+      "item": [
+        {
+          "name": "All",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n    applications {\n        id\n        groupId\n        name\n        description\n        company\n        contact\n        jobUrl\n        status\n        notes\n        files\n        isArchived\n    }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "By Id",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query($id: String!) {\n    application(id: $id) {\n        id\n        name\n        description\n        company\n        contact\n        jobUrl\n        status\n        notes\n        files\n        isArchived\n    }\n}",
+                "variables": "{\n    \"id\": \"{{application_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "By Group Id",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query($groupId: String!) {\n    applicationsByGroupId(groupId: $groupId) {\n        id\n        name\n        description\n        company\n        contact\n        jobUrl\n        status\n        notes\n        files\n        isArchived\n    }\n}",
+                "variables": "{\n    \"groupId\": \"{{group_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "pm.collectionVariables.set(\"application_id\", jsonData.data.createApplication.id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation($groupId: String!) {\n    createApplication(\n        input: {\n            groupId: $groupId\n            name:\"Test Application\"\n            description: \"test description\"\n            company: \"Muster Ag\"\n            contact: \"Max Mustermann\"\n            jobUrl: \"https://example.org/\"\n            status: \"beworben\"\n            notes: \"keine\"\n            isArchived: false\n        }\n    ) {\n        id\n    }\n}",
+                "variables": "{\n    \"groupId\": \"{{group_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation($id: String!) {\n    updateApplication(\n        id: $id\n        input: {\n            name:\"Test Application Updated\",\n        }\n    ) {\n        id\n        name\n        isArchived\n    }\n}",
+                "variables": "{\n    \"id\": \"{{application_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Move to new group",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation($id: String!, $groupId: String!) {\n    moveApplication(\n        id: $id\n        newGroupId: $groupId\n    ) {\n        id\n        name\n        isArchived\n    }\n}",
+                "variables": "{\n    \"id\": \"{{application_id}}\",\n    \"groupId\": \"{{group_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Archive",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation($id: String!) {\n    archiveApplication(\n        id: $id\n    )\n}",
+                "variables": "{\n    \"id\": \"{{application_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Unarchive",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation($id: String!) {\n    unarchiveApplication(\n        id: $id\n    ) {\n        id\n        name\n        description\n    }\n}",
+                "variables": "{\n    \"id\": \"{{application_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation($id: String!) {\n    deleteApplication(\n        id: $id\n    )\n}",
+                "variables": "{\n    \"id\": \"{{application_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ],
   "event": [
@@ -205,6 +393,11 @@
     },
     {
       "key": "group_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "application_id",
       "value": "",
       "type": "string"
     }

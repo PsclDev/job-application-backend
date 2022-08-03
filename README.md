@@ -31,14 +31,15 @@ This is a fun project to use my new learned knowledge of graphql. You can track 
 
 | Sate | Function                      |
 | ---- | ----------------------------- |
-| ❌   | Create Application            |
-| ❌   | Get applications by group     |
-| ❌   | Get application by id         |
-| ❌   | Update application by id      |
-| ❌   | Archive application by id     |
-| ❌   | Unarchive application by id   |
-| ❌   | Move application to new group |
-| ❌   | Delete application by id      |
+| ✅   | Create Application            |
+| ✅   | Get applications              |
+| ✅   | Get applications by group     |
+| ✅   | Get application by id         |
+| ✅   | Update application by id      |
+| ✅   | Archive application by id     |
+| ✅   | Unarchive application by id   |
+| ✅   | Move application to new group |
+| ✅   | Delete application by id      |
 
 ## Tech Stack
 

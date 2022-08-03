@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@config';
 import { HealthModule } from './module/health/health.module';
 import { GroupModule } from './module/group/group.module';
+import { ApplicationModule } from './module/application/application.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { GroupModule } from './module/group/group.module';
     }),
     HealthModule,
     GroupModule,
+    ApplicationModule,
   ],
   controllers: [],
 })

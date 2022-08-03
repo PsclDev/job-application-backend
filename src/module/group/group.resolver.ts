@@ -1,5 +1,15 @@
+import { ApplicationEntity } from '@module/application/application.entity';
+import { ApplicationService } from '@module/application/application.service';
 import { Logger } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
+import { GroupEntity } from './group.entity';
 import { GroupService } from './group.service';
 import { CreateGroupInput, GroupType, UpdateGroupInput } from './group.types';
 
@@ -7,7 +17,10 @@ import { CreateGroupInput, GroupType, UpdateGroupInput } from './group.types';
 export class GroupResolver {
   private readonly logger = new Logger(GroupResolver.name);
 
-  constructor(private readonly groupService: GroupService) {}
+  constructor(
+    private readonly groupService: GroupService,
+    private readonly applicationsService: ApplicationService,
+  ) {}
 
   @Query(() => [GroupType])
   async groups(): Promise<GroupType[]> {
@@ -54,5 +67,13 @@ export class GroupResolver {
   async deleteGroup(@Args('id') id: string): Promise<boolean> {
     this.logger.debug(`delete group by id ${id}`);
     return await this.groupService.delete(id);
+  }
+
+  //parent is any because if I set it to GroupEntity its undefined, dont know why
+  @ResolveField()
+  async applications(@Parent() parent: any): Promise<ApplicationEntity[]> {
+    const group: GroupEntity = parent;
+    this.logger.debug(`get applications for group id ${group.id}`);
+    return await this.applicationsService.getByGroupId(group.id);
   }
 }
