@@ -23,7 +23,9 @@
       "@module": ["module/"],
       "@module/*": ["module/*"],
       "@util": ["util/"],
-      "@util/*": ["util/*"]
+      "@util/*": ["util/*"],
+      "@shared": ["../shared/"],
+      "@shared/*": ["../shared/*"]
     }
   }
 }
