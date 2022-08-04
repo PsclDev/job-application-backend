@@ -68,9 +68,9 @@ You can also run the project in a dockershell. If you want that just run the fol
 <br>
 
 - **`yarn` or `npm i`** _to install the backend dependencies_
-- **`yarn prepare`** _to install husky_
+- **`npx husky install`** _to install husky_
 - **`yarn start:dev`** _run the backend_
-- Set the required Envs based on the `..EXAMPLE-.env`, you have to create a `.env` file, inside the `/backend` directory
+- Set the required Envs based on the `..EXAMPLE-.env`, you have to create a `.env` file
 - If you wanna create migrations with typeorm, you need to setup a `ormconfig.json` file, there is also a example for it `..EXAMPLE_ormconfig.json`
 
 _`Note to .env: If any env value contains a dollar sign ($) you have to encode that with a backslash (\$)`_
