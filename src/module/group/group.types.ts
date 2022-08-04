@@ -1,23 +1,11 @@
 import { ApplicationEntity } from '@module/application/application.entity';
-import {
-  ApplicationBaseInterface,
-  ApplicationType,
-} from '@module/application/application.types';
+import { ApplicationType } from '@module/application/application.types';
 import { ObjectType, Field, InputType, PartialType, ID } from '@nestjs/graphql';
+import { GroupInterface } from '@shared/types';
 import { IsBoolean, IsOptional, IsString, MinLength } from 'class-validator';
 
-export interface GroupBaseInterface {
-  id: string;
-  name: string;
-  description: string;
-  applications: ApplicationEntity[];
-  createdAt?: Date;
-  updatedAt?: Date;
-  isArchived: boolean;
-}
-
 @ObjectType('Group')
-export class GroupType implements GroupBaseInterface {
+export class GroupType implements GroupInterface {
   @Field(() => ID)
   id: string;
 
@@ -43,7 +31,7 @@ export class GroupType implements GroupBaseInterface {
 @InputType()
 export class CreateGroupInput
   implements
-    Omit<GroupBaseInterface, 'id' | 'applications' | 'createdAt' | 'updatedAt'>
+    Omit<GroupInterface, 'id' | 'applications' | 'createdAt' | 'updatedAt'>
 {
   @IsString()
   @MinLength(3)

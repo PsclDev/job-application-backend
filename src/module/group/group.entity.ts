@@ -1,4 +1,5 @@
 import { ApplicationEntity } from '@module/application/application.entity';
+import { GroupInterface } from '@shared/types';
 import {
   Column,
   CreateDateColumn,
@@ -7,10 +8,9 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { GroupBaseInterface } from './group.types';
 
 @Entity('group')
-export class GroupEntity implements GroupBaseInterface {
+export class GroupEntity implements GroupInterface {
   @PrimaryColumn()
   id: string;
 

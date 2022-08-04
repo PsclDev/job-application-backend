@@ -1,4 +1,5 @@
 import { ObjectType, Field, InputType, PartialType, ID } from '@nestjs/graphql';
+import { ApplicationInterface } from '@shared/types';
 import {
   IsArray,
   IsBoolean,
@@ -8,25 +9,8 @@ import {
   Length,
   MinLength,
 } from 'class-validator';
-
-export interface ApplicationBaseInterface {
-  id: string;
-  groupId: string;
-  name: string;
-  description: string;
-  company: string;
-  contact: string;
-  jobUrl: string;
-  status: string;
-  notes: string;
-  files: string[];
-  createdAt?: Date;
-  updatedAt?: Date;
-  isArchived: boolean;
-}
-
 @ObjectType('Application')
-export class ApplicationType implements ApplicationBaseInterface {
+export class ApplicationType implements ApplicationInterface {
   @Field(() => ID)
   id: string;
 
@@ -69,7 +53,7 @@ export class ApplicationType implements ApplicationBaseInterface {
 
 @InputType()
 export class CreateApplicationInput
-  implements Omit<ApplicationBaseInterface, 'id' | 'createdAt' | 'updatedAt'>
+  implements Omit<ApplicationInterface, 'id' | 'createdAt' | 'updatedAt'>
 {
   @IsString()
   @Length(8)

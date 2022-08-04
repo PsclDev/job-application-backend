@@ -1,4 +1,5 @@
 import { GroupEntity } from '@module/group/group.entity';
+import { ApplicationInterface } from '@shared/types';
 import { Exclude } from 'class-transformer';
 import {
   Column,
@@ -9,10 +10,9 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ApplicationBaseInterface } from './application.types';
 
 @Entity('application')
-export class ApplicationEntity implements ApplicationBaseInterface {
+export class ApplicationEntity implements ApplicationInterface {
   @PrimaryColumn()
   id: string;
 
