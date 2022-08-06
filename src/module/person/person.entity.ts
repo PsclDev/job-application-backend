@@ -1,8 +1,11 @@
+import { MeetingEntity } from '@module/meeting/meeting.entity';
 import { PersonInterface } from '@shared/types';
+import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -23,4 +26,8 @@ export class PersonEntity implements PersonInterface {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => MeetingEntity, (meeting) => meeting.attendees)
+  @Exclude()
+  meeting: MeetingEntity;
 }
