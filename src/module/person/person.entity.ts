@@ -27,7 +27,9 @@ export class PersonEntity implements PersonInterface {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => MeetingEntity, (meeting) => meeting.attendees)
+  @ManyToOne(() => MeetingEntity, (meeting) => meeting.attendees, {
+    nullable: true,
+  })
   @Exclude()
   meeting: MeetingEntity;
 }

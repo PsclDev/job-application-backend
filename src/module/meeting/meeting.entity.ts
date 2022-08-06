@@ -1,9 +1,12 @@
+import { ApplicationEntity } from '@module/application/application.entity';
 import { PersonEntity } from '@module/person/person.entity';
 import { MeetingInterface } from '@shared/types';
+import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
@@ -31,4 +34,10 @@ export class MeetingEntity implements MeetingInterface {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => ApplicationEntity, (application) => application.meetings, {
+    nullable: true,
+  })
+  @Exclude()
+  application: ApplicationEntity;
 }

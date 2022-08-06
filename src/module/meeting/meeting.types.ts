@@ -1,16 +1,7 @@
 import { PersonType } from '@module/person/person.types';
 import { ObjectType, Field, InputType, PartialType, ID } from '@nestjs/graphql';
 import { MeetingInterface, PersonInterface } from '@shared/types';
-import { Type } from 'class-transformer';
-import {
-  IsArray,
-  IsDate,
-  IsObject,
-  IsOptional,
-  IsString,
-  MinLength,
-  ValidateNested,
-} from 'class-validator';
+import { IsDate, IsOptional, IsString, MinLength } from 'class-validator';
 
 @ObjectType('Meeting')
 export class MeetingType implements MeetingInterface {
@@ -38,7 +29,8 @@ export class MeetingType implements MeetingInterface {
 
 @InputType()
 export class CreateMeetingInput
-  implements Omit<MeetingInterface, 'id' | 'createdAt' | 'updatedAt'>
+  implements
+    Omit<MeetingInterface, 'id' | 'attendees' | 'createdAt' | 'updatedAt'>
 {
   @IsString()
   @MinLength(3)
@@ -48,11 +40,6 @@ export class CreateMeetingInput
   @IsDate()
   @Field()
   date: Date;
-
-  @ValidateNested()
-  @Type(() => PersonType)
-  @Field(() => [PersonType])
-  attendees: PersonInterface[];
 
   @IsString()
   @IsOptional()

@@ -1,5 +1,14 @@
+import { PersonEntity } from '@module/person/person.entity';
 import { Logger } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
+import { ApplicationEntity } from './application.entity';
 import { ApplicationService } from './application.service';
 import {
   ApplicationType,
@@ -75,5 +84,26 @@ export class ApplicationResolver {
   async deleteApplication(@Args('id') id: string): Promise<boolean> {
     this.logger.debug(`delete application by id ${id}`);
     return await this.applicationService.delete(id);
+  }
+
+  //parent is any because if I set it to GroupEntity its undefined, dont know why
+  @ResolveField()
+  async contact(@Parent() parent: any) {
+    const group: ApplicationEntity = parent;
+    this.logger.debug(`get contact for application id ${group.id}`);
+  }
+
+  //parent is any because if I set it to GroupEntity its undefined, dont know why
+  @ResolveField()
+  async meetings(@Parent() parent: any) {
+    const group: ApplicationEntity = parent;
+    this.logger.debug(`get meetings for application id ${group.id}`);
+  }
+
+  //parent is any because if I set it to GroupEntity its undefined, dont know why
+  @ResolveField()
+  async files(@Parent() parent: any) {
+    const group: ApplicationEntity = parent;
+    this.logger.debug(`get files for application id ${group.id}`);
   }
 }

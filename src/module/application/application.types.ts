@@ -1,13 +1,23 @@
+import { CreateFileInput, FileType } from '@module/file/file.types';
+import { CreateMeetingInput, MeetingType } from '@module/meeting/meeting.types';
+import { CreatePersonInput, PersonType } from '@module/person/person.types';
 import { ObjectType, Field, InputType, PartialType, ID } from '@nestjs/graphql';
-import { ApplicationInterface } from '@shared/types';
 import {
-  IsArray,
+  ApplicationInterface,
+  FileInterface,
+  MeetingInterface,
+  PersonInterface,
+} from '@shared/types';
+import { Type } from 'class-transformer';
+import {
   IsBoolean,
+  IsObject,
   IsOptional,
   IsString,
   IsUrl,
   Length,
   MinLength,
+  ValidateNested,
 } from 'class-validator';
 @ObjectType('Application')
 export class ApplicationType implements ApplicationInterface {
@@ -26,8 +36,8 @@ export class ApplicationType implements ApplicationInterface {
   @Field()
   company: string;
 
-  @Field({ nullable: true })
-  contact: string;
+  @Field(() => PersonType, { nullable: true })
+  contact: PersonInterface;
 
   @Field()
   jobUrl: string;
@@ -35,17 +45,20 @@ export class ApplicationType implements ApplicationInterface {
   @Field()
   status: string;
 
+  @Field(() => [MeetingType], { nullable: true })
+  meetings: MeetingInterface[];
+
   @Field({ nullable: true })
   notes: string;
 
-  @Field(() => [String], { nullable: true })
-  files: string[];
+  @Field(() => [FileType], { nullable: true })
+  files: FileInterface[];
 
   @Field()
-  createdAt?: Date;
+  createdAt: Date;
 
   @Field()
-  updatedAt?: Date;
+  updatedAt: Date;
 
   @Field(() => Boolean)
   isArchived: boolean;
@@ -75,9 +88,10 @@ export class CreateApplicationInput
   @Field()
   company: string;
 
-  @IsString()
+  @IsObject()
   @IsOptional()
-  @Field(() => String)
+  @Type(() => CreatePersonInput)
+  @Field(() => CreatePersonInput, { nullable: true })
   contact = null;
 
   @IsUrl()
@@ -89,14 +103,20 @@ export class CreateApplicationInput
   @Field()
   status: string;
 
+  @ValidateNested()
+  @Type(() => CreateMeetingInput)
+  @Field(() => [CreateMeetingInput], { nullable: true })
+  meetings: MeetingInterface[];
+
   @IsString()
   @IsOptional()
   @Field(() => String)
   notes = null;
 
-  @IsArray()
-  @IsString({ each: true })
-  files: string[] = [];
+  @ValidateNested()
+  @Type(() => CreateFileInput)
+  @Field(() => [CreateFileInput], { nullable: true })
+  files: FileInterface[] = [];
 
   @IsBoolean()
   @IsOptional()
