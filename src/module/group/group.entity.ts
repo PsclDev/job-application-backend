@@ -26,10 +26,10 @@ export class GroupEntity implements GroupInterface {
   applications: ApplicationEntity[];
 
   @CreateDateColumn()
-  createdAt?: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt?: Date;
+  updatedAt: Date;
 
   @Column()
   isArchived: boolean;

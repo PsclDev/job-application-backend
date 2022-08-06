@@ -1,8 +1,13 @@
-import { ApplicationEntity } from '@module/application/application.entity';
 import { ApplicationType } from '@module/application/application.types';
 import { ObjectType, Field, InputType, PartialType, ID } from '@nestjs/graphql';
-import { GroupInterface } from '@shared/types';
-import { IsBoolean, IsOptional, IsString, MinLength } from 'class-validator';
+import { ApplicationInterface, GroupInterface } from '@shared/types';
+import {
+  IsBoolean,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 @ObjectType('Group')
 export class GroupType implements GroupInterface {
@@ -16,13 +21,13 @@ export class GroupType implements GroupInterface {
   description: string;
 
   @Field(() => [ApplicationType], { nullable: true })
-  applications: ApplicationEntity[];
+  applications: ApplicationInterface[];
 
   @Field()
-  createdAt?: Date;
+  createdAt: Date;
 
   @Field()
-  updatedAt?: Date;
+  updatedAt: Date;
 
   @Field(() => Boolean)
   isArchived: boolean;
@@ -35,11 +40,13 @@ export class CreateGroupInput
 {
   @IsString()
   @MinLength(3)
+  @MaxLength(50)
   @Field()
   name: string;
 
   @IsString()
   @IsOptional()
+  @MaxLength(155)
   @Field(() => String)
   description = null;
 
