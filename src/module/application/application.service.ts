@@ -94,6 +94,15 @@ export class ApplicationService {
     return await this.getById(id);
   }
 
+  async deleteByGroupId(groupId: string): Promise<boolean> {
+    this.logger.log(`delete all applications by group id ${groupId}`);
+
+    const res = await this.applicationRepo.delete({ groupId });
+    this.checkAffectedResult(res);
+
+    return res.affected === 1;
+  }
+
   async delete(id: string): Promise<boolean> {
     this.logger.log(`delete application by id ${id}`);
 

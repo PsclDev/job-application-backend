@@ -57,8 +57,8 @@ export class GroupResolver {
     return await this.groupService.archive(id);
   }
 
-  @Mutation(() => GroupType)
-  async unarchiveGroup(@Args('id') id: string): Promise<GroupType> {
+  @Mutation(() => Boolean)
+  async unarchiveGroup(@Args('id') id: string): Promise<boolean> {
     this.logger.debug(`unarchive group by id ${id}`);
     return await this.groupService.unarchive(id);
   }
@@ -66,6 +66,7 @@ export class GroupResolver {
   @Mutation(() => Boolean)
   async deleteGroup(@Args('id') id: string): Promise<boolean> {
     this.logger.debug(`delete group by id ${id}`);
+    await this.applicationsService.deleteByGroupId(id);
     return await this.groupService.delete(id);
   }
 

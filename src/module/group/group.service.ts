@@ -59,13 +59,13 @@ export class GroupService {
     return res.affected === 1;
   }
 
-  async unarchive(id: string): Promise<GroupEntity> {
+  async unarchive(id: string): Promise<boolean> {
     this.logger.log(`unarchive group by id ${id}`);
 
     const res = await this.groupRepo.update(id, { isArchived: false });
     this.checkAffectedResult(res);
 
-    return await this.getById(id);
+    return res.affected === 1;
   }
 
   async delete(id: string): Promise<boolean> {

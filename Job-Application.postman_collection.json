@@ -148,7 +148,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "mutation($id: String!) {\n    unarchiveGroup(\n        id: $id\n    ) {\n        id\n        name\n        description\n    }\n}",
+                "query": "mutation($id: String!) {\n    unarchiveGroup(\n        id: $id\n    )\n}",
                 "variables": "{\n    \"id\": \"{{group_id}}\"\n}"
               }
             },
