@@ -10,7 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('application')
+@Entity('person')
 export class PersonEntity implements PersonInterface {
   @PrimaryColumn()
   id: string;

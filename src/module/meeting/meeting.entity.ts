@@ -12,7 +12,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('application')
+@Entity('meeting')
 export class MeetingEntity implements MeetingInterface {
   @PrimaryColumn()
   id: string;

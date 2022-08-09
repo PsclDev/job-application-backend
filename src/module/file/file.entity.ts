@@ -10,7 +10,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('application')
+@Entity('file')
 export class FileEntity implements FileInterface {
   @PrimaryColumn()
   id: string;
