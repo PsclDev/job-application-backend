@@ -85,13 +85,13 @@ export class ApplicationService {
     return res.affected === 1;
   }
 
-  async unarchive(id: string): Promise<ApplicationEntity> {
+  async unarchive(id: string): Promise<boolean> {
     this.logger.log(`unarchive application by id ${id}`);
 
     const res = await this.applicationRepo.update(id, { isArchived: false });
     this.checkAffectedResult(res);
 
-    return await this.getById(id);
+    return res.affected === 1;
   }
 
   async deleteByGroupId(groupId: string) {

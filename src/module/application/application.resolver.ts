@@ -74,8 +74,8 @@ export class ApplicationResolver {
     return await this.applicationService.archive(id);
   }
 
-  @Mutation(() => ApplicationType)
-  async unarchiveApplication(@Args('id') id: string): Promise<ApplicationType> {
+  @Mutation(() => Boolean)
+  async unarchiveApplication(@Args('id') id: string): Promise<boolean> {
     this.logger.debug(`unarchive application by id ${id}`);
     return await this.applicationService.unarchive(id);
   }
