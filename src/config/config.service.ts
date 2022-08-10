@@ -23,6 +23,10 @@ const CONFIG_SCHEMA = Joi.object().keys({
     migrationsRun: Joi.bool().optional(),
     migrationsPath: Joi.string().optional(),
   }),
+  useCache: Joi.bool().optional(),
+  cacheOptions: Joi.object().keys({
+    ttl: Joi.number().integer().greater(0).required(),
+  }),
 });
 
 @Injectable()
@@ -42,6 +46,10 @@ export class ConfigService {
     synchronize: bool(process.env.APP_DB_SYNCHRONIZE) || false,
     migrationsRun: bool(process.env.APP_RUN_MIGRATIONS) || true,
     migrationsPath: process.env.APP_MIGRATIONS_PATH || 'dist/migrations/*.js',
+  };
+  useCache = bool(process.env.APP_USE_CACHE) || false;
+  cacheOptions = {
+    ttl: Number(process.env.APP_CACHE_TTL) || 60 * 60, //1 hour
   };
 }
 

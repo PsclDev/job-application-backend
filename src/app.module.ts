@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -12,6 +12,14 @@ import { MeetingModule } from './module/meeting/meeting.module';
 
 @Module({
   imports: [
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      isGlobal: true,
+      useFactory: async (config: ConfigService) => ({
+        ttl: config.cacheOptions.ttl,
+      }),
+      inject: [ConfigService],
+    }),
     ConfigModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: true,
