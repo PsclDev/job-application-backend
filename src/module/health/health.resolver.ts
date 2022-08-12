@@ -22,8 +22,6 @@ export class HealthController {
         this.db.pingCheck('database', { connection: this.defaultConnection }),
     ]);
 
-    console.log(healthCheck);
-
     return {
       version: this.configService.appVersion,
       databaseRunning: healthCheck.info.database.status === 'up',
