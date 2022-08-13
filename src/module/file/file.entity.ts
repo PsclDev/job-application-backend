@@ -16,13 +16,13 @@ export class FileEntity implements FileInterface {
   id: string;
 
   @Column()
-  fileName: string;
+  name: string;
 
   @Column()
-  fileSize: number;
+  size: number;
 
   @Column()
-  mimeType: string;
+  mime: string;
 
   @CreateDateColumn()
   createdAt: Date;

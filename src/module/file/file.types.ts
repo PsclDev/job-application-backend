@@ -1,6 +1,6 @@
 import { ObjectType, Field, InputType, PartialType, ID } from '@nestjs/graphql';
-import { FileInterface, PersonInterface } from '@shared/types';
-import { IsString, MinLength } from 'class-validator';
+import { FileInterface } from '@shared/types';
+import { IsMimeType, IsNumber, IsString, MinLength } from 'class-validator';
 
 @ObjectType('File')
 export class FileType implements FileInterface {
@@ -8,13 +8,13 @@ export class FileType implements FileInterface {
   id: string;
 
   @Field()
-  fileName: string;
+  name: string;
 
   @Field(() => Number)
-  fileSize: number;
+  size: number;
 
   @Field()
-  mimeType: string;
+  mime: string;
 
   @Field()
   createdAt: Date;
@@ -30,15 +30,16 @@ export class CreateFileInput
   @IsString()
   @MinLength(3)
   @Field()
-  fileName: string;
+  name: string;
 
+  @IsNumber()
   @Field(() => Number)
-  fileSize: number;
+  size: number;
 
-  @IsString()
+  @IsMimeType()
   @MinLength(3)
   @Field()
-  mimeType: string;
+  mime: string;
 }
 
 @InputType()

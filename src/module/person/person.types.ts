@@ -1,6 +1,6 @@
 import { ObjectType, Field, InputType, PartialType, ID } from '@nestjs/graphql';
 import { PersonInterface } from '@shared/types';
-import { IsString, MinLength } from 'class-validator';
+import { IsEmail, IsString, MinLength } from 'class-validator';
 
 @ObjectType('Person')
 export class PersonType implements PersonInterface {
@@ -12,6 +12,9 @@ export class PersonType implements PersonInterface {
 
   @Field()
   position: string;
+
+  @Field()
+  email: string;
 
   @Field()
   createdAt: Date;
@@ -30,9 +33,14 @@ export class CreatePersonInput
   name: string;
 
   @IsString()
-  @MinLength(3)
+  @MinLength(2)
   @Field()
   position: string;
+
+  @IsEmail()
+  @MinLength(3)
+  @Field()
+  email: string;
 }
 
 @InputType()

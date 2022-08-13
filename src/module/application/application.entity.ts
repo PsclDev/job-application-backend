@@ -1,8 +1,11 @@
 import { FileEntity } from '@module/file/file.entity';
 import { GroupEntity } from '@module/group/group.entity';
 import { MeetingEntity } from '@module/meeting/meeting.entity';
-import { PersonEntity } from '@module/person/person.entity';
-import { ApplicationInterface, MeetingInterface } from '@shared/types';
+import {
+  ApplicationInterface,
+  MeetingInterface,
+  PersonInterface,
+} from '@shared/types';
 import { Exclude } from 'class-transformer';
 import {
   Column,
@@ -11,7 +14,6 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -38,8 +40,8 @@ export class ApplicationEntity implements ApplicationInterface {
   @Column()
   company: string;
 
-  @OneToOne(() => PersonEntity, { nullable: true })
-  contact: PersonEntity;
+  @Column({ type: 'json', nullable: true })
+  contact: PersonInterface;
 
   @Column()
   jobUrl: string;

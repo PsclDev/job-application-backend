@@ -1,13 +1,11 @@
 import { ApplicationEntity } from '@module/application/application.entity';
-import { PersonEntity } from '@module/person/person.entity';
-import { MeetingInterface } from '@shared/types';
+import { MeetingInterface, PersonInterface } from '@shared/types';
 import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -23,8 +21,8 @@ export class MeetingEntity implements MeetingInterface {
   @Column()
   date: Date;
 
-  @OneToMany(() => PersonEntity, (person) => person.meeting)
-  attendees: PersonEntity[];
+  @Column({ type: 'json', nullable: true })
+  attendees: PersonInterface[];
 
   @Column()
   notes: string;
