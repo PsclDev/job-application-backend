@@ -37,6 +37,7 @@ import { MeetingModule } from './module/meeting/meeting.module';
         synchronize: config.database.synchronize,
         migrationsRun: config.database.migrationsRun,
         migrations: [config.database.migrationsPath],
+        logging: config.database.logging,
         cli: {
           migrationsDir: 'src/migrations',
         },

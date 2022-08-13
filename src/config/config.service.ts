@@ -22,6 +22,7 @@ const CONFIG_SCHEMA = Joi.object().keys({
     synchronize: Joi.bool().optional(),
     migrationsRun: Joi.bool().optional(),
     migrationsPath: Joi.string().optional(),
+    logging: Joi.bool().optional(),
   }),
   useCache: Joi.bool().optional(),
   cacheOptions: Joi.object().keys({
@@ -46,6 +47,7 @@ export class ConfigService {
     synchronize: bool(process.env.APP_DB_SYNCHRONIZE) || false,
     migrationsRun: bool(process.env.APP_RUN_MIGRATIONS) || true,
     migrationsPath: process.env.APP_MIGRATIONS_PATH || 'dist/migrations/*.js',
+    logging: bool(process.env.APP_DB_LOGGING) || false,
   };
   useCache = bool(process.env.APP_USE_CACHE) || false;
   cacheOptions = {
