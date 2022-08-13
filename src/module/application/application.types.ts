@@ -116,7 +116,7 @@ export class CreateApplicationInput
   @ValidateNested()
   @Type(() => CreateFileInput)
   @Field(() => [CreateFileInput], { nullable: true })
-  files: FileInterface[] = [];
+  files: FileInterface[];
 
   @IsBoolean()
   @IsOptional()

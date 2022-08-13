@@ -30,9 +30,7 @@ export class FileEntity implements FileInterface {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => ApplicationEntity, (application) => application.files, {
-    nullable: true,
-  })
+  @ManyToOne(() => ApplicationEntity, (application) => application.files)
   @Exclude()
   application: ApplicationEntity;
 }
