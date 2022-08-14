@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryColumn,
   UpdateDateColumn,
@@ -24,7 +25,7 @@ export class MeetingEntity implements MeetingInterface {
   @Column({ type: 'json', nullable: true })
   attendees: PersonInterface[];
 
-  @Column()
+  @Column({ nullable: true })
   notes: string;
 
   @CreateDateColumn()
@@ -33,9 +34,11 @@ export class MeetingEntity implements MeetingInterface {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => ApplicationEntity, (application) => application.meetings, {
-    nullable: true,
-  })
+  @Column({ name: 'application_id' })
+  applicationId: string;
+
+  @ManyToOne(() => ApplicationEntity, (application) => application.meetings)
+  @JoinColumn({ name: 'group_iapplication_idd' })
   @Exclude()
   application: ApplicationEntity;
 }
