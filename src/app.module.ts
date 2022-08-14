@@ -7,7 +7,6 @@ import { HealthModule } from './module/health/health.module';
 import { GroupModule } from './module/group/group.module';
 import { ApplicationModule } from './module/application/application.module';
 import { FileModule } from './module/file/file.module';
-import { PersonModule } from './module/person/person.module';
 import { MeetingModule } from './module/meeting/meeting.module';
 
 @Module({
@@ -48,7 +47,6 @@ import { MeetingModule } from './module/meeting/meeting.module';
     GroupModule,
     ApplicationModule,
     FileModule,
-    PersonModule,
     MeetingModule,
   ],
   controllers: [],
