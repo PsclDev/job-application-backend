@@ -12,7 +12,7 @@ export class GroupService {
 
   constructor(
     @InjectRepository(GroupEntity)
-    private groupRepo: Repository<GroupEntity>,
+    private readonly groupRepo: Repository<GroupEntity>,
   ) {}
 
   async getAll(): Promise<GroupEntity[]> {

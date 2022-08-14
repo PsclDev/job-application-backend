@@ -1,3 +1,4 @@
+import { MeetingService } from '@module/meeting/meeting.service';
 import { Logger } from '@nestjs/common';
 import {
   Args,
@@ -19,7 +20,10 @@ import {
 export class ApplicationResolver {
   private readonly logger = new Logger(ApplicationResolver.name);
 
-  constructor(private readonly applicationService: ApplicationService) {}
+  constructor(
+    private readonly applicationService: ApplicationService,
+    private readonly meetingService: MeetingService,
+  ) {}
 
   @Query(() => [ApplicationType])
   async applications(): Promise<ApplicationType[]> {
@@ -88,14 +92,15 @@ export class ApplicationResolver {
   //parent is any because if I set it to GroupEntity its undefined, dont know why
   @ResolveField()
   async meetings(@Parent() parent: any) {
-    const group: ApplicationEntity = parent;
-    this.logger.debug(`get meetings for application id ${group.id}`);
+    const application: ApplicationEntity = parent;
+    this.logger.debug(`get meetings for application id ${application.id}`);
+    return await this.meetingService.getAllByApplicationId(application.id);
   }
 
   //parent is any because if I set it to GroupEntity its undefined, dont know why
   @ResolveField()
   async files(@Parent() parent: any) {
-    const group: ApplicationEntity = parent;
-    this.logger.debug(`get files for application id ${group.id}`);
+    const application: ApplicationEntity = parent;
+    this.logger.debug(`get files for application id ${application.id}`);
   }
 }

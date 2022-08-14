@@ -15,7 +15,7 @@ export class ApplicationService {
 
   constructor(
     @InjectRepository(ApplicationEntity)
-    private applicationRepo: Repository<ApplicationEntity>,
+    private readonly applicationRepo: Repository<ApplicationEntity>,
   ) {}
 
   async getAll(): Promise<ApplicationEntity[]> {
