@@ -1,12 +1,13 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { generateId } from '@util/generateId';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { generateId, prettyPrintObject, checkAffectedResult } from '@util';
+import { Repository } from 'typeorm';
 import { GroupEntity } from './group.entity';
 import { CreateGroupInput, UpdateGroupInput } from './group.types';
 
 @Injectable()
 export class GroupService {
+  private readonly moduleName = 'group';
   private readonly logger = new Logger(GroupService.name);
 
   constructor(
@@ -30,7 +31,7 @@ export class GroupService {
 
   async create(input: CreateGroupInput): Promise<GroupEntity> {
     this.logger.log('create group');
-    this.prettyPrintObject('createGroupInput:', input);
+    prettyPrintObject(this.logger, 'createGroupInput:', input);
 
     const group = this.groupRepo.create({
       id: generateId<GroupEntity>(this.groupRepo),
@@ -42,10 +43,10 @@ export class GroupService {
 
   async update(id: string, input: UpdateGroupInput): Promise<GroupEntity> {
     this.logger.log(`update group by id ${id}`);
-    this.prettyPrintObject('updateGroupInput:', input);
+    prettyPrintObject(this.logger, 'updateGroupInput:', input);
 
     const res = await this.groupRepo.update(id, input);
-    this.checkAffectedResult(res);
+    checkAffectedResult(this.moduleName, res);
 
     return await this.getById(id);
   }
@@ -54,7 +55,7 @@ export class GroupService {
     this.logger.log(`archive group by id ${id}`);
 
     const res = await this.groupRepo.update(id, { isArchived: true });
-    this.checkAffectedResult(res);
+    checkAffectedResult(this.moduleName, res);
 
     return res.affected === 1;
   }
@@ -63,7 +64,7 @@ export class GroupService {
     this.logger.log(`unarchive group by id ${id}`);
 
     const res = await this.groupRepo.update(id, { isArchived: false });
-    this.checkAffectedResult(res);
+    checkAffectedResult(this.moduleName, res);
 
     return res.affected === 1;
   }
@@ -72,18 +73,8 @@ export class GroupService {
     this.logger.log(`delete group by id ${id}`);
 
     const res = await this.groupRepo.delete({ id });
-    this.checkAffectedResult(res);
+    checkAffectedResult(this.moduleName, res);
 
     return res.affected === 1;
-  }
-
-  private prettyPrintObject(msg: string, obj: any) {
-    this.logger.debug(msg, JSON.stringify(obj, null, 2));
-  }
-
-  private checkAffectedResult(res: UpdateResult | DeleteResult) {
-    if (res.affected <= 0) {
-      throw new NotFoundException('no group found by give id');
-    }
   }
 }

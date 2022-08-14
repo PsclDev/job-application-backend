@@ -1,7 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { generateId } from '@util/generateId';
-import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import { generateId, prettyPrintObject, checkAffectedResult } from '@util';
+import { Repository } from 'typeorm';
 import { ApplicationEntity } from './application.entity';
 import {
   CreateApplicationInput,
@@ -10,6 +10,7 @@ import {
 
 @Injectable()
 export class ApplicationService {
+  private readonly moduleName = 'application';
   private readonly logger = new Logger(ApplicationService.name);
 
   constructor(
@@ -44,7 +45,7 @@ export class ApplicationService {
 
   async create(input: CreateApplicationInput): Promise<ApplicationEntity> {
     this.logger.log('create application');
-    this.prettyPrintObject('createApplicationInput:', input);
+    prettyPrintObject(this.logger, 'createApplicationInput:', input);
 
     const application = this.applicationRepo.create({
       id: generateId<ApplicationEntity>(this.applicationRepo),
@@ -59,10 +60,10 @@ export class ApplicationService {
     input: UpdateApplicationInput,
   ): Promise<ApplicationEntity> {
     this.logger.log(`update application by id ${id}`);
-    this.prettyPrintObject('updateApplicationInput:', input);
+    prettyPrintObject(this.logger, 'updateApplicationInput:', input);
 
     const res = await this.applicationRepo.update(id, input);
-    this.checkAffectedResult(res);
+    checkAffectedResult(this.moduleName, res);
 
     return await this.getById(id);
   }
@@ -71,7 +72,7 @@ export class ApplicationService {
     this.logger.log(`move application by id ${id} to group id ${newGroupId}`);
 
     const res = await this.applicationRepo.update(id, { groupId: newGroupId });
-    this.checkAffectedResult(res);
+    checkAffectedResult(this.moduleName, res);
 
     return await this.getById(id);
   }
@@ -80,7 +81,7 @@ export class ApplicationService {
     this.logger.log(`archive application by id ${id}`);
 
     const res = await this.applicationRepo.update(id, { isArchived: true });
-    this.checkAffectedResult(res);
+    checkAffectedResult(this.moduleName, res);
 
     return res.affected === 1;
   }
@@ -89,7 +90,7 @@ export class ApplicationService {
     this.logger.log(`unarchive application by id ${id}`);
 
     const res = await this.applicationRepo.update(id, { isArchived: false });
-    this.checkAffectedResult(res);
+    checkAffectedResult(this.moduleName, res);
 
     return res.affected === 1;
   }
@@ -103,18 +104,8 @@ export class ApplicationService {
     this.logger.log(`delete application by id ${id}`);
 
     const res = await this.applicationRepo.delete({ id });
-    this.checkAffectedResult(res);
+    checkAffectedResult(this.moduleName, res);
 
     return res.affected === 1;
-  }
-
-  private prettyPrintObject(msg: string, obj: any) {
-    this.logger.debug(msg, JSON.stringify(obj, null, 2));
-  }
-
-  private checkAffectedResult(res: UpdateResult | DeleteResult) {
-    if (res.affected <= 0) {
-      throw new NotFoundException('no application found by give id');
-    }
   }
 }
