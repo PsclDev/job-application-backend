@@ -1,12 +1,14 @@
 import { CreateFileInput, FileType } from '@module/file/file.types';
 import { CreateMeetingInput, MeetingType } from '@module/meeting/meeting.types';
 import { CreatePersonInput, PersonType } from '@module/person/person.types';
+import { CreateStatusInput, StatusType } from '@module/status/status.types';
 import { ObjectType, Field, InputType, PartialType, ID } from '@nestjs/graphql';
 import {
   ApplicationInterface,
   FileInterface,
   MeetingInterface,
   PersonInterface,
+  StatusInterface,
 } from '@shared/types';
 import { Type } from 'class-transformer';
 import {
@@ -19,6 +21,7 @@ import {
   MinLength,
   ValidateNested,
 } from 'class-validator';
+
 @ObjectType('Application')
 export class ApplicationType implements ApplicationInterface {
   @Field(() => ID)
@@ -42,8 +45,8 @@ export class ApplicationType implements ApplicationInterface {
   @Field()
   jobUrl: string;
 
-  @Field()
-  status: string;
+  @Field(() => [StatusType], { nullable: true })
+  status: StatusInterface[];
 
   @Field(() => [MeetingType], { nullable: true })
   meetings: MeetingInterface[];
@@ -66,7 +69,8 @@ export class ApplicationType implements ApplicationInterface {
 
 @InputType()
 export class CreateApplicationInput
-  implements Omit<ApplicationInterface, 'id' | 'createdAt' | 'updatedAt'>
+  implements
+    Omit<ApplicationInterface, 'id' | 'history' | 'createdAt' | 'updatedAt'>
 {
   @IsString()
   @Length(8)
@@ -92,19 +96,19 @@ export class CreateApplicationInput
   @IsOptional()
   @Type(() => CreatePersonInput)
   @Field(() => CreatePersonInput, { nullable: true })
-  contact = null;
+  contact: PersonInterface;
 
   @IsUrl()
   @Field()
   jobUrl: string;
 
-  @IsString()
-  @MinLength(3)
-  @Field()
-  status: string;
+  @ValidateNested()
+  @Type(() => Array<CreateStatusInput>)
+  @Field(() => [CreateStatusInput])
+  status: StatusInterface[];
 
   @ValidateNested()
-  @Type(() => CreateMeetingInput)
+  @Type(() => Array<CreateMeetingInput>)
   @Field(() => [CreateMeetingInput], { nullable: true })
   meetings: MeetingInterface[];
 
@@ -114,7 +118,7 @@ export class CreateApplicationInput
   notes = null;
 
   @ValidateNested()
-  @Type(() => CreateFileInput)
+  @Type(() => Array<CreateFileInput>)
   @Field(() => [CreateFileInput], { nullable: true })
   files: FileInterface[];
 

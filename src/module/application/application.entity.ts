@@ -1,6 +1,7 @@
 import { FileEntity } from '@module/file/file.entity';
 import { GroupEntity } from '@module/group/group.entity';
 import { MeetingEntity } from '@module/meeting/meeting.entity';
+import { StatusEntity } from '@module/status/status.entity';
 import {
   ApplicationInterface,
   MeetingInterface,
@@ -46,8 +47,11 @@ export class ApplicationEntity implements ApplicationInterface {
   @Column()
   jobUrl: string;
 
-  @Column()
-  status: string;
+  @OneToMany(() => StatusEntity, (status) => status.application, {
+    cascade: true,
+    eager: true,
+  })
+  status: StatusEntity[];
 
   @OneToMany(() => MeetingEntity, (meeting) => meeting.application, {
     nullable: true,

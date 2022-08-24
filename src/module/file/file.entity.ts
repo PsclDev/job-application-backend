@@ -16,7 +16,19 @@ export class FileEntity implements FileInterface {
   id: string;
 
   @Column()
+  groupId: string;
+
+  @Column()
+  applicationId: string;
+
+  @Column()
   name: string;
+
+  @Column()
+  extension: string;
+
+  @Column()
+  data: string;
 
   @Column()
   size: number;

@@ -20,7 +20,9 @@ export class ApplicationService {
 
   async getAll(): Promise<ApplicationEntity[]> {
     this.logger.log('get all applications');
-    return this.applicationRepo.find();
+    const all = await this.applicationRepo.find();
+    prettyPrintObject(this.logger, 'all:', all);
+    return all;
   }
 
   async getById(id: string): Promise<ApplicationEntity> {
