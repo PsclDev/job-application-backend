@@ -1,4 +1,5 @@
 import { MeetingService } from '@module/meeting/meeting.service';
+import { CreateStatusInput } from '@module/status/status.types';
 import { Logger } from '@nestjs/common';
 import {
   Args,
@@ -81,6 +82,16 @@ export class ApplicationResolver {
   async unarchiveApplication(@Args('id') id: string): Promise<boolean> {
     this.logger.debug(`unarchive application by id ${id}`);
     return await this.applicationService.unarchive(id);
+  }
+
+  @Mutation(() => Boolean)
+  async updateStatus(
+    @Args('id') id: string,
+    @Args('input') input: CreateStatusInput,
+  ): Promise<boolean> {
+    this.logger.debug('update status');
+    await this.applicationService.updateStatus(id, input);
+    return true;
   }
 
   @Mutation(() => Boolean)

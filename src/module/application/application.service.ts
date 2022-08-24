@@ -1,3 +1,5 @@
+import { StatusEntity } from '@module/status/status.entity';
+import { CreateStatusInput } from '@module/status/status.types';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { generateId, prettyPrintObject, checkAffectedResult } from '@util';
@@ -16,6 +18,8 @@ export class ApplicationService {
   constructor(
     @InjectRepository(ApplicationEntity)
     private readonly applicationRepo: Repository<ApplicationEntity>,
+    @InjectRepository(StatusEntity)
+    private readonly statusRepo: Repository<StatusEntity>,
   ) {}
 
   async getAll(): Promise<ApplicationEntity[]> {
@@ -51,6 +55,9 @@ export class ApplicationService {
 
     const application = this.applicationRepo.create({
       id: generateId<ApplicationEntity>(this.applicationRepo),
+      status: input.status.forEach(
+        (x: StatusEntity) => (x.id = generateId<StatusEntity>(this.statusRepo)),
+      ),
       ...input,
     });
 
@@ -95,6 +102,18 @@ export class ApplicationService {
     checkAffectedResult(this.moduleName, res);
 
     return res.affected === 1;
+  }
+
+  async updateStatus(id: string, input: CreateStatusInput): Promise<void> {
+    const application = await this.getById(id);
+
+    const status = await this.statusRepo.create({
+      id: generateId<StatusEntity>(this.statusRepo),
+      state: input.state,
+      date: input.date,
+      application,
+    });
+    await this.statusRepo.save(status);
   }
 
   async deleteByGroupId(groupId: string) {

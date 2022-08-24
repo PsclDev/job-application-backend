@@ -1,5 +1,6 @@
 import { FileModule } from '@module/file/file.module';
 import { MeetingModule } from '@module/meeting/meeting.module';
+import { StatusEntity } from '@module/status/status.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApplicationEntity } from './application.entity';
@@ -8,7 +9,7 @@ import { ApplicationService } from './application.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ApplicationEntity]),
+    TypeOrmModule.forFeature([ApplicationEntity, StatusEntity]),
     FileModule,
     MeetingModule,
   ],

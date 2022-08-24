@@ -1,17 +1,11 @@
 import { ApplicationEntity } from '@module/application/application.entity';
 import { StateEnum, StatusInterface } from '@shared/types';
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  Unique,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryColumn, Unique } from 'typeorm';
 
 @Entity('status')
 @Unique(['state', 'application'])
 export class StatusEntity implements StatusInterface {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: string;
 
   @Column()
