@@ -22,7 +22,7 @@ export class MeetingEntity implements MeetingInterface {
   @Column()
   date: Date;
 
-  @Column({ type: 'json', nullable: true })
+  @Column({ type: 'jsonb' })
   attendees: PersonInterface[];
 
   @Column({ nullable: true })

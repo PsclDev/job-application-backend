@@ -12,6 +12,7 @@ import {
 } from '@shared/types';
 import { Type } from 'class-transformer';
 import {
+  IsArray,
   IsBoolean,
   IsObject,
   IsOptional,
@@ -102,13 +103,15 @@ export class CreateApplicationInput
   @Field()
   jobUrl: string;
 
+  @Type(() => CreateStatusInput)
+  @IsArray()
   @ValidateNested()
-  @Type(() => Array<CreateStatusInput>)
   @Field(() => [CreateStatusInput])
   status: StatusInterface[];
 
+  @Type(() => CreateMeetingInput)
+  @IsArray()
   @ValidateNested()
-  @Type(() => Array<CreateMeetingInput>)
   @Field(() => [CreateMeetingInput], { nullable: true })
   meetings: MeetingInterface[];
 
@@ -117,8 +120,9 @@ export class CreateApplicationInput
   @Field(() => String)
   notes = null;
 
+  @Type(() => CreateFileInput)
+  @IsArray()
   @ValidateNested()
-  @Type(() => Array<CreateFileInput>)
   @Field(() => [CreateFileInput], { nullable: true })
   files: FileInterface[];
 
