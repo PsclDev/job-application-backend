@@ -1,13 +1,13 @@
-import { ObjectType, Field, InputType, PartialType, ID } from '@nestjs/graphql';
-import { FileInterface } from '@shared/types';
 import {
-  IsMimeType,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Length,
-  MinLength,
-} from 'class-validator';
+  ObjectType,
+  Field,
+  InputType,
+  PartialType,
+  ID,
+  Float,
+} from '@nestjs/graphql';
+import { FileInterface } from '@shared/types';
+import { IsOptional, IsString, Length } from 'class-validator';
 
 @ObjectType('File')
 export class FileType implements FileInterface {
@@ -29,7 +29,7 @@ export class FileType implements FileInterface {
   @Field()
   data: string;
 
-  @Field(() => Number)
+  @Field()
   size: number;
 
   @Field()
@@ -44,37 +44,19 @@ export class FileType implements FileInterface {
 
 @InputType()
 export class CreateFileInput
-  implements
-    Omit<
-      FileInterface,
-      'id' | 'extension' | 'data' | 'createdAt' | 'updatedAt'
-    >
+  implements Pick<FileInterface, 'groupId' | 'applicationId'>
 {
   @IsString()
   @Length(8)
   @IsOptional()
-  @Field({ nullable: true })
+  @Field()
   groupId: string;
 
   @IsString()
   @Length(8)
   @IsOptional()
-  @Field({ nullable: true })
+  @Field()
   applicationId: string;
-
-  @IsString()
-  @MinLength(3)
-  @Field()
-  name: string;
-
-  @IsNumber()
-  @Field(() => Number)
-  size: number;
-
-  @IsMimeType()
-  @MinLength(3)
-  @Field()
-  mime: string;
 }
 
 @InputType()

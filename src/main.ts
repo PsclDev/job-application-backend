@@ -1,5 +1,6 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { graphqlUploadExpress } from 'graphql-upload';
 import { AppModule } from './app.module';
 import { ConfigService } from './config';
 
@@ -18,6 +19,10 @@ async function bootstrap() {
       whitelist: true,
       validateCustomDecorators: true,
     }),
+  );
+
+  app.use(
+    graphqlUploadExpress({ maxFileSize: config.maxFileSize, maxFiles: 1 }),
   );
 
   const port = config.httpPort;

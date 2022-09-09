@@ -28,6 +28,7 @@ const CONFIG_SCHEMA = Joi.object().keys({
   cacheOptions: Joi.object().keys({
     ttl: Joi.number().integer().greater(0).required(),
   }),
+  maxFileSize: Joi.number().integer().greater(0).required(),
 });
 
 @Injectable()
@@ -53,11 +54,18 @@ export class ConfigService {
   cacheOptions = {
     ttl: Number(process.env.APP_CACHE_TTL) || 60 * 60, //1 hour
   };
+  maxFileSize = calculateMaxFileSize(
+    Number(process.env.APP_MAX_FILE_SIZE_IN_MB) || 1,
+  );
 }
 
 function bool(input: string): boolean {
   if (!input) return null;
   return input.toLowerCase() === 'true';
+}
+
+function calculateMaxFileSize(mb: number): number {
+  return mb * 1048576;
 }
 
 if (!Boolean(process.env.APP_IS_RUNNING_IN_PIPELINE)) {
