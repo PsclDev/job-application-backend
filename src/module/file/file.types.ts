@@ -1,11 +1,4 @@
-import {
-  ObjectType,
-  Field,
-  InputType,
-  PartialType,
-  ID,
-  Float,
-} from '@nestjs/graphql';
+import { ObjectType, Field, InputType, PartialType, ID } from '@nestjs/graphql';
 import { FileInterface } from '@shared/types';
 import { IsOptional, IsString, Length } from 'class-validator';
 

@@ -1,5 +1,6 @@
 {
   "**/*.{ts,js}": [
+    "eslint --ext \".js,.ts\" --fix .",
     "prettier --write --list-different .",
     "eslint --ext \".js,.ts\" --ignore-path .gitignore .",
     "prettier --check ."

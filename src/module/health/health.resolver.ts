@@ -5,7 +5,7 @@ import { InjectConnection } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { HealthType } from './health.type';
 
-@Resolver((of) => HealthType)
+@Resolver(() => HealthType)
 export class HealthController {
   constructor(
     private health: HealthCheckService,
@@ -15,7 +15,7 @@ export class HealthController {
     private configService: ConfigService,
   ) {}
 
-  @Query((returns) => HealthType)
+  @Query(() => HealthType)
   async healthCheck() {
     const healthCheck = await this.health.check([
       () =>
