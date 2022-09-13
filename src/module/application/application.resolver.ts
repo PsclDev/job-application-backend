@@ -90,8 +90,7 @@ export class ApplicationResolver {
     @Args('input') input: CreateStatusInput,
   ): Promise<boolean> {
     this.logger.debug('update status');
-    await this.applicationService.updateStatus(id, input);
-    return true;
+    return await this.applicationService.updateStatus(id, input);
   }
 
   @Mutation(() => Boolean)

@@ -71,7 +71,7 @@ export class ApplicationType implements ApplicationInterface {
 @InputType()
 export class CreateApplicationInput
   implements
-    Omit<ApplicationInterface, 'id' | 'history' | 'createdAt' | 'updatedAt'>
+    Omit<ApplicationInterface, 'id' | 'status' | 'createdAt' | 'updatedAt'>
 {
   @IsString()
   @Length(8)
@@ -103,12 +103,12 @@ export class CreateApplicationInput
   @Field()
   jobUrl: string;
 
+  @IsObject()
   @Type(() => CreateStatusInput)
-  @IsArray()
-  @ValidateNested()
-  @Field(() => [CreateStatusInput])
-  status: StatusInterface[];
+  @Field(() => CreateStatusInput)
+  status: StatusInterface;
 
+  @IsOptional()
   @Type(() => CreateMeetingInput)
   @IsArray()
   @ValidateNested()
@@ -120,6 +120,7 @@ export class CreateApplicationInput
   @Field(() => String)
   notes = null;
 
+  @IsOptional()
   @Type(() => CreateFileInput)
   @IsArray()
   @ValidateNested()

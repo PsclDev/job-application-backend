@@ -33,6 +33,9 @@ export class MeetingType implements MeetingInterface {
   notes: string;
 
   @Field()
+  link: string;
+
+  @Field()
   createdAt: Date;
 
   @Field()
@@ -67,6 +70,11 @@ export class CreateMeetingInput
   @IsOptional()
   @Field({ nullable: true })
   notes: string;
+
+  @IsString()
+  @IsOptional()
+  @Field({ nullable: true })
+  link: string;
 }
 
 @InputType()

@@ -1,4 +1,5 @@
 import { StatusEntity } from '@module/status/status.entity';
+import { StatusService } from '@module/status/status.service';
 import { CreateStatusInput } from '@module/status/status.types';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -20,6 +21,7 @@ export class ApplicationService {
     private readonly applicationRepo: Repository<ApplicationEntity>,
     @InjectRepository(StatusEntity)
     private readonly statusRepo: Repository<StatusEntity>,
+    private readonly statusService: StatusService,
   ) {}
 
   async getAll(): Promise<ApplicationEntity[]> {
@@ -54,10 +56,13 @@ export class ApplicationService {
 
     const application = this.applicationRepo.create({
       id: generateId<ApplicationEntity>(this.applicationRepo),
-      status: input.status.forEach(
-        (x: StatusEntity) => (x.id = generateId<StatusEntity>(this.statusRepo)),
-      ),
       ...input,
+      status: [
+        {
+          id: generateId<StatusEntity>(this.statusRepo),
+          ...input.status,
+        },
+      ],
     });
 
     return await this.applicationRepo.save(application);
@@ -69,8 +74,10 @@ export class ApplicationService {
   ): Promise<ApplicationEntity> {
     this.logger.log(`update application by id ${id}`);
     prettyPrintObject(this.logger, 'updateApplicationInput:', input);
+    const { status, ...rest } = input;
 
-    const res = await this.applicationRepo.update(id, input);
+    const res = await this.applicationRepo.update(id, rest);
+    await this.statusService.update(await this.getById(id), status);
     checkAffectedResult(this.moduleName, res);
 
     return await this.getById(id);
@@ -103,16 +110,8 @@ export class ApplicationService {
     return res.affected === 1;
   }
 
-  async updateStatus(id: string, input: CreateStatusInput): Promise<void> {
-    const application = await this.getById(id);
-
-    const status = await this.statusRepo.create({
-      id: generateId<StatusEntity>(this.statusRepo),
-      state: input.state,
-      date: input.date,
-      application,
-    });
-    await this.statusRepo.save(status);
+  async updateStatus(id: string, input: CreateStatusInput): Promise<boolean> {
+    return !!(await this.statusService.update(await this.getById(id), input));
   }
 
   async deleteByGroupId(groupId: string) {

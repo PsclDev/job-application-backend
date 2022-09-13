@@ -28,6 +28,9 @@ export class MeetingEntity implements MeetingInterface {
   @Column({ nullable: true })
   notes: string;
 
+  @Column({ nullable: true })
+  link: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
