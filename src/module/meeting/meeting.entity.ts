@@ -37,11 +37,13 @@ export class MeetingEntity implements MeetingInterface {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({ name: 'application_id' })
+  @Column()
   applicationId: string;
 
-  @ManyToOne(() => ApplicationEntity, (application) => application.meetings)
-  @JoinColumn({ name: 'group_iapplication_idd' })
+  @ManyToOne(() => ApplicationEntity, (application) => application.meetings, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'application_id' })
   @Exclude()
   application: ApplicationEntity;
 }

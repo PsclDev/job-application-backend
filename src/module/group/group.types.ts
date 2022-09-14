@@ -1,12 +1,20 @@
 import { ApplicationType } from '@module/application/application.types';
+import { CreateFileInput, FileType } from '@module/file/file.types';
 import { ObjectType, Field, InputType, PartialType, ID } from '@nestjs/graphql';
-import { ApplicationInterface, GroupInterface } from '@shared/types';
 import {
+  ApplicationInterface,
+  FileInterface,
+  GroupInterface,
+} from '@shared/types';
+import { Type } from 'class-transformer';
+import {
+  IsArray,
   IsBoolean,
   IsOptional,
   IsString,
   MaxLength,
   MinLength,
+  ValidateNested,
 } from 'class-validator';
 
 @ObjectType('Group')
@@ -22,6 +30,9 @@ export class GroupType implements GroupInterface {
 
   @Field(() => [ApplicationType], { nullable: true })
   applications: ApplicationInterface[];
+
+  @Field(() => [FileType], { nullable: true })
+  files: FileInterface[];
 
   @Field()
   createdAt: Date;
@@ -49,6 +60,13 @@ export class CreateGroupInput
   @MaxLength(155)
   @Field(() => String)
   description = null;
+
+  @IsOptional()
+  @Type(() => CreateFileInput)
+  @IsArray()
+  @ValidateNested()
+  @Field(() => [CreateFileInput], { nullable: true })
+  files: FileInterface[];
 
   @IsBoolean()
   @IsOptional()

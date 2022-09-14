@@ -24,7 +24,7 @@ export class ApplicationEntity implements ApplicationInterface {
   @PrimaryColumn()
   id: string;
 
-  @Column({ name: 'group_id' })
+  @Column()
   groupId: string;
 
   @ManyToOne(() => GroupEntity, (group) => group.applications)
@@ -54,6 +54,8 @@ export class ApplicationEntity implements ApplicationInterface {
   status: StatusEntity[];
 
   @OneToMany(() => MeetingEntity, (meeting) => meeting.application, {
+    cascade: true,
+    eager: true,
     nullable: true,
   })
   meetings: MeetingInterface[];
@@ -61,7 +63,10 @@ export class ApplicationEntity implements ApplicationInterface {
   @Column({ nullable: true })
   notes: string;
 
-  @OneToMany(() => FileEntity, (file) => file.application, { nullable: true })
+  @OneToMany(() => FileEntity, (file) => file.application, {
+    cascade: true,
+    nullable: true,
+  })
   files: FileEntity[];
 
   @CreateDateColumn()

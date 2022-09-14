@@ -14,6 +14,8 @@ export class StatusEntity implements StatusInterface {
   @Column({ nullable: true })
   date: Date;
 
-  @ManyToOne(() => ApplicationEntity, (application) => application.status)
+  @ManyToOne(() => ApplicationEntity, (application) => application.status, {
+    onDelete: 'CASCADE',
+  })
   application: ApplicationEntity;
 }
