@@ -39,15 +39,15 @@ export class CreatePersonInput
   @Field()
   name: string;
 
-  @IsString()
   @IsOptional()
+  @IsString()
   @MinLength(2)
   @MaxLength(50)
   @Field()
   position: string;
 
-  @IsEmail()
   @IsOptional()
+  @IsEmail()
   @MinLength(3)
   @MaxLength(50)
   @Field()
