@@ -1,14 +1,16 @@
 import {
   Injectable,
   Logger,
+  NotFoundException,
   UnsupportedMediaTypeException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { excludeColumns } from '@util/excludeColumns';
 import { generateId } from '@util/generateId';
 import { prettyPrintObject } from '@util/prettyPrintObject';
 import { FileUpload } from 'graphql-upload';
 import * as path from 'path';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 import { allowedExtensions } from './allowedExtensions';
 import { FileEntity } from './file.entity';
 import { CreateFileInput, FileType } from './file.types';
@@ -22,6 +24,25 @@ export class FileService {
     @InjectRepository(FileEntity)
     private readonly fileRepo: Repository<FileEntity>,
   ) {}
+
+  async getAll(): Promise<FileEntity[]> {
+    this.logger.log('get all applications');
+    const conditions: FindManyOptions<FileEntity> = {
+      select: excludeColumns(this.fileRepo, ['data']),
+    };
+
+    const all = await this.fileRepo.find(conditions);
+    return all;
+  }
+
+  async getById(id: string): Promise<FileEntity> {
+    this.logger.log(`get application by id ${id}`);
+    const file = await this.fileRepo.findOne({ id });
+
+    if (!file) throw new NotFoundException('no file found by give id');
+
+    return file;
+  }
 
   async upload(
     input: CreateFileInput,

@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { FileService } from './file.service';
 import { CreateFileInput, FileType } from './file.types';
@@ -9,6 +9,18 @@ export class FileResolver {
   private readonly logger = new Logger(FileResolver.name);
 
   constructor(private readonly fileService: FileService) {}
+
+  @Query(() => [FileType])
+  async files(): Promise<FileType[]> {
+    this.logger.debug('get all files without data');
+    return await this.fileService.getAll();
+  }
+
+  @Query(() => FileType)
+  async file(@Args('id') id: string): Promise<FileType> {
+    this.logger.debug(`get file by id ${id}`);
+    return await this.fileService.getById(id);
+  }
 
   @Mutation(() => FileType)
   async uploadFile(

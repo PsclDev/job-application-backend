@@ -429,7 +429,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "mutation($applicationId: String!) {\n    createMeeting(\n        input: {\n            applicationId: $applicationId\n            title:\"Cool Meeting\"\n            date: \"2022-08-15T15:45:00.000Z\"\n            attendees: [{\n                name: \"Hans Jürgen\"\n                position: \"CEO\"\n                email: \"seher@hansi.com\"\n            },\n            {\n                name: \"Hannelore Peters\"\n                position: \"HR\"\n                email: \"lore@hanne.com\"\n            }]\n            link: \"https://google.com\"\n        }\n    ) {\n        id\n        applicationId\n        title\n        attendees {\n            name\n            position\n            email\n        }\n        notes    \n    }\n}",
+                "query": "mutation($applicationId: String!) {\n    createMeeting(\n        input: {\n            applicationId: $applicationId\n            title:\"Cool Meeting\"\n            date: \"2022-09-27T15:45:00Z\"\n            attendees: [{\n                name: \"Hans Jürgen\"\n                position: \"CEO\"\n                email: \"seher@hansi.com\"\n            },\n            {\n                name: \"Hannelore Peters\"\n                position: \"HR\"\n                email: \"lore@hanne.com\"\n            }]\n            link: \"https://google.com\"\n        }\n    ) {\n        id\n        applicationId\n        title\n        date\n        attendees {\n            name\n            position\n            email\n        }\n        notes    \n    }\n}",
                 "variables": "{\n    \"applicationId\": \"{{application_id}}\"\n}"
               }
             },
@@ -508,7 +508,57 @@
       "name": "File",
       "item": [
         {
+          "name": "All",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n    files {\n        groupId\n        applicationId\n        name\n        extension\n        size\n        mime\n    }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "By Id",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query($id: String!) {\n    file(id: $id) {\n        groupId\n        applicationId\n        name\n        extension\n        size\n        mime\n        data\n    }\n}",
+                "variables": "{\n    \"id\": \"{{file_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Upload",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "pm.collectionVariables.set(\"file_id\", jsonData.data.uploadFile.id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [],
@@ -528,7 +578,7 @@
                 {
                   "key": "0",
                   "type": "file",
-                  "src": []
+                  "src": "/Users/pj/Downloads/Example.numbers"
                 }
               ]
             },
@@ -576,6 +626,11 @@
     },
     {
       "key": "meeting_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "file_id",
       "value": "",
       "type": "string"
     }
