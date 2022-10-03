@@ -22,7 +22,7 @@ async function bootstrap() {
   );
 
   app.use(
-    graphqlUploadExpress({ maxFileSize: config.maxFileSize, maxFiles: 1 }),
+    graphqlUploadExpress({ maxFileSize: config.file.maxSize, maxFiles: 1 }),
   );
 
   const port = config.httpPort;

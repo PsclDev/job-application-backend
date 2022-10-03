@@ -2,6 +2,15 @@ import { ObjectType, Field, InputType, PartialType, ID } from '@nestjs/graphql';
 import { FileInterface } from '@shared/types';
 import { IsOptional, IsString, Length } from 'class-validator';
 
+@ObjectType('FileOptions')
+export class FileOptions {
+  @Field()
+  maxSize: number;
+
+  @Field(() => [String])
+  allowedExtensions: string[];
+}
+
 @ObjectType('File')
 export class FileType implements FileInterface {
   @Field(() => ID)

@@ -1,3 +1,4 @@
+import { ConfigService } from '@config/config.service';
 import {
   Injectable,
   Logger,
@@ -11,9 +12,8 @@ import { prettyPrintObject } from '@util/prettyPrintObject';
 import { FileUpload } from 'graphql-upload';
 import * as path from 'path';
 import { FindManyOptions, Repository } from 'typeorm';
-import { allowedExtensions } from './allowedExtensions';
 import { FileEntity } from './file.entity';
-import { CreateFileInput, FileType } from './file.types';
+import { CreateFileInput, FileOptions, FileType } from './file.types';
 
 @Injectable()
 export class FileService {
@@ -21,9 +21,14 @@ export class FileService {
   private readonly logger = new Logger(FileService.name);
 
   constructor(
+    private readonly configServie: ConfigService,
     @InjectRepository(FileEntity)
     private readonly fileRepo: Repository<FileEntity>,
   ) {}
+
+  getFileOptions(): FileOptions {
+    return this.configServie.file;
+  }
 
   async getAll(): Promise<FileEntity[]> {
     this.logger.log('get all applications');
@@ -52,6 +57,7 @@ export class FileService {
     prettyPrintObject(this.logger, 'createFileInput:', input);
     prettyPrintObject(this.logger, 'fileUpload:', uploadedFile);
 
+    const allowedExtensions = this.configServie.file.allowedExtensions;
     const parsedFilepath = path.parse(uploadedFile.filename);
     const stream = await uploadedFile.createReadStream();
 

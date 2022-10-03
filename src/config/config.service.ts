@@ -28,7 +28,10 @@ const CONFIG_SCHEMA = Joi.object().keys({
   cacheOptions: Joi.object().keys({
     ttl: Joi.number().integer().greater(0).required(),
   }),
-  maxFileSize: Joi.number().integer().greater(0).required(),
+  file: Joi.object().keys({
+    maxSize: Joi.number().integer().greater(0).required(),
+    allowedExtensions: Joi.array().items(Joi.string()).required(),
+  }),
 });
 
 @Injectable()
@@ -54,9 +57,12 @@ export class ConfigService {
   cacheOptions = {
     ttl: Number(process.env.APP_CACHE_TTL) || 60 * 60, //1 hour
   };
-  maxFileSize = calculateMaxFileSize(
-    Number(process.env.APP_MAX_FILE_SIZE_IN_MB) || 1,
-  );
+  file = {
+    maxSize: calculatemaxSize(Number(process.env.APP_FILE_MAX_SIZE_IN_MB) || 1),
+    allowedExtensions: generateAllowedFileExtensions(
+      process.env.APP_FILE_ALLOWED_EXTENSIONS,
+    ),
+  };
 }
 
 function bool(input: string): boolean {
@@ -64,8 +70,12 @@ function bool(input: string): boolean {
   return input.toLowerCase() === 'true';
 }
 
-function calculateMaxFileSize(mb: number): number {
+function calculatemaxSize(mb: number): number {
   return mb * 1048576;
+}
+
+function generateAllowedFileExtensions(extensions: string): string[] {
+  return extensions.split(',').map((extension) => `.${extension}`);
 }
 
 if (!Boolean(process.env.APP_IS_RUNNING_IN_PIPELINE)) {
