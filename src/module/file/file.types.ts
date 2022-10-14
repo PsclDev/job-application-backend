@@ -51,13 +51,13 @@ export class CreateFileInput
   @IsString()
   @Length(8)
   @IsOptional()
-  @Field()
+  @Field({ nullable: true })
   groupId: string;
 
   @IsString()
   @Length(8)
   @IsOptional()
-  @Field()
+  @Field({ nullable: true })
   applicationId: string;
 }
 

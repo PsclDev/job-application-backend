@@ -508,6 +508,25 @@
       "name": "File",
       "item": [
         {
+          "name": "Options",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n    fileOptions {\n        allowedExtensions\n        maxSize\n    }\n}",
+                "variables": ""
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "All",
           "request": {
             "method": "POST",
@@ -515,7 +534,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "query {\n    files {\n        groupId\n        applicationId\n        name\n        extension\n        size\n        mime\n    }\n}",
+                "query": "query {\n    files {\n        id\n        groupId\n        applicationId\n        name\n        extension\n        size\n        mime\n    }\n}",
                 "variables": ""
               }
             },
@@ -546,14 +565,14 @@
           "response": []
         },
         {
-          "name": "Upload",
+          "name": "Application Upload",
           "event": [
             {
               "listen": "test",
               "script": {
                 "exec": [
                   "var jsonData = JSON.parse(responseBody);",
-                  "pm.collectionVariables.set(\"file_id\", jsonData.data.uploadFile.id);"
+                  "pm.collectionVariables.set(\"application_file_id\", jsonData.data.uploadFile.id);"
                 ],
                 "type": "text/javascript"
               }
@@ -578,7 +597,95 @@
                 {
                   "key": "0",
                   "type": "file",
-                  "src": "/Users/pj/Downloads/Example.numbers"
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Group Upload",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "pm.collectionVariables.set(\"group_file_id\", jsonData.data.uploadFile.id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "operations",
+                  "value": "{\n    \"query\": \"mutation ($groupId: String!, $file: Upload!) { uploadFile(input: {groupId: $groupId },  file: $file) { id groupId applicationId name extension data size mime createdAt updatedAt}}\",\n    \"variables\": {\n    \"groupId\": \"{{group_id}}\",\n    \"file\": null\n    }\n}",
+                  "type": "text"
+                },
+                {
+                  "key": "map",
+                  "value": "{\n    \"0\": [\n        \"variables.file\"\n    ]\n}",
+                  "type": "text"
+                },
+                {
+                  "key": "0",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Global Upload",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "pm.collectionVariables.set(\"global_file_id\", jsonData.data.uploadFile.id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "operations",
+                  "value": "{\n    \"query\": \"mutation ($file: Upload!) { uploadFile(input: {} file: $file) { id groupId applicationId name extension data size mime createdAt updatedAt}}\",\n    \"variables\": {\n    \"file\": null\n    }\n}",
+                  "type": "text"
+                },
+                {
+                  "key": "map",
+                  "value": "{\n    \"0\": [\n        \"variables.file\"\n    ]\n}",
+                  "type": "text"
+                },
+                {
+                  "key": "0",
+                  "type": "file",
+                  "src": []
                 }
               ]
             },
@@ -630,7 +737,17 @@
       "type": "string"
     },
     {
-      "key": "file_id",
+      "key": "application_file_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "group_file_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "global_file_id",
       "value": "",
       "type": "string"
     }
