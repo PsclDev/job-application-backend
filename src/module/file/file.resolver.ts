@@ -2,7 +2,12 @@ import { Logger } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { FileService } from './file.service';
-import { CreateFileInput, FileOptions, FileType } from './file.types';
+import {
+  CreateFileInput,
+  FileOptions,
+  FileType,
+  UpdateFileInput,
+} from './file.types';
 
 @Resolver(() => FileType)
 export class FileResolver {
@@ -35,5 +40,20 @@ export class FileResolver {
   ): Promise<FileType> {
     this.logger.debug('upload file');
     return await this.fileService.upload(input, file);
+  }
+
+  @Mutation(() => FileType)
+  async updateFile(
+    @Args('id') id: string,
+    @Args('input') input: UpdateFileInput,
+  ): Promise<FileType> {
+    this.logger.debug(`update file by id ${id}`);
+    return await this.fileService.update(id, input);
+  }
+
+  @Mutation(() => Boolean)
+  async deleteFile(@Args('id') id: string): Promise<boolean> {
+    this.logger.debug(`delete file by id ${id}`);
+    return await this.fileService.delete(id);
   }
 }

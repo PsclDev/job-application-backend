@@ -6,6 +6,7 @@ import {
   UnsupportedMediaTypeException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { checkAffectedResult } from '@util/checkAffectedResult';
 import { excludeColumns } from '@util/excludeColumns';
 import { generateId } from '@util/generateId';
 import { prettyPrintObject } from '@util/prettyPrintObject';
@@ -13,7 +14,12 @@ import { FileUpload } from 'graphql-upload';
 import * as path from 'path';
 import { FindManyOptions, Repository } from 'typeorm';
 import { FileEntity } from './file.entity';
-import { CreateFileInput, FileOptions, FileType } from './file.types';
+import {
+  CreateFileInput,
+  FileOptions,
+  FileType,
+  UpdateFileInput,
+} from './file.types';
 
 @Injectable()
 export class FileService {
@@ -105,5 +111,24 @@ export class FileService {
       this.logger.error('Error uploading file', err);
       return null;
     }
+  }
+
+  async update(id: string, input: UpdateFileInput): Promise<FileEntity> {
+    this.logger.log(`update file by id ${id}`);
+    prettyPrintObject(this.logger, 'updateFileInput:', input);
+
+    const res = await this.fileRepo.update(id, input);
+    checkAffectedResult(this.moduleName, res);
+
+    return await this.getById(id);
+  }
+
+  async delete(id: string): Promise<boolean> {
+    this.logger.log(`delete file by id ${id}`);
+
+    const res = await this.fileRepo.delete({ id });
+    checkAffectedResult(this.moduleName, res);
+
+    return res.affected === 1;
   }
 }

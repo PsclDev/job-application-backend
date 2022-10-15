@@ -553,7 +553,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "query($id: String!) {\n    file(id: $id) {\n        groupId\n        applicationId\n        name\n        extension\n        size\n        mime\n        data\n    }\n}",
+                "query": "query($id: String!) {\n    file(id: $id) {\n        id\n        groupId\n        applicationId\n        name\n        extension\n        size\n        mime\n        data\n    }\n}",
                 "variables": "{\n    \"id\": \"{{file_id}}\"\n}"
               }
             },
@@ -688,6 +688,44 @@
                   "src": []
                 }
               ]
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation($id: String!) {\n    deleteFile(\n        id: $id\n    )\n}",
+                "variables": "{\n    \"id\": \"{{global_file_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation($id: String!) {\n    updateFile(\n        id: $id\n        input: {\n            name:\"New File Name\",\n        }\n    ) {\n        id\n        groupId\n        applicationId\n        name\n        extension\n        size\n        mime\n        data \n    }\n}",
+                "variables": "{\n    \"id\": \"{{global_file_id}}\"\n}"
+              }
             },
             "url": {
               "raw": "{{base_url}}",

@@ -62,4 +62,9 @@ export class CreateFileInput
 }
 
 @InputType()
-export class UpdatePersonInput extends PartialType(CreateFileInput) {}
+export class UpdateFileInput extends PartialType(CreateFileInput) {
+  @IsString()
+  @IsOptional()
+  @Field({ nullable: true })
+  name: string;
+}
