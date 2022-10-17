@@ -42,6 +42,12 @@ export class FileResolver {
     return await this.fileService.upload(input, file);
   }
 
+  @Query(() => String)
+  async serveFile(@Args('id') id: string): Promise<string> {
+    this.logger.debug(`serve file with id ${id}`);
+    return await this.fileService.serve(id);
+  }
+
   @Mutation(() => FileType)
   async updateFile(
     @Args('id') id: string,

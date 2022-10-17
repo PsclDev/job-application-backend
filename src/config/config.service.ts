@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const dotenvExpand = require('dotenv-expand');
 import * as Joi from 'joi';
+import { join } from 'path';
 
 dotenvExpand.expand(dotenv.config());
 
@@ -31,6 +32,9 @@ const CONFIG_SCHEMA = Joi.object().keys({
   file: Joi.object().keys({
     maxSize: Joi.number().integer().greater(0).required(),
     allowedExtensions: Joi.array().items(Joi.string()).required(),
+    cacheTime: Joi.number().greater(0).required(),
+    tempData: Joi.string().required(),
+    servePath: Joi.string().required(),
   }),
 });
 
@@ -62,6 +66,11 @@ export class ConfigService {
     allowedExtensions: generateAllowedFileExtensions(
       process.env.APP_FILE_ALLOWED_EXTENSIONS,
     ),
+    cacheTime: minutesToMilliseconds(
+      Number(process.env.APP_FILE_CACHE_TIME_IN_MIN) || 15,
+    ),
+    tempData: join(__dirname, '..', '_tempData'),
+    servePath: '/files',
   };
 }
 
@@ -72,6 +81,10 @@ function bool(input: string): boolean {
 
 function calculatemaxSize(mb: number): number {
   return mb * 1048576;
+}
+
+function minutesToMilliseconds(min: number): number {
+  return min * 60000;
 }
 
 function generateAllowedFileExtensions(extensions: string): string[] {

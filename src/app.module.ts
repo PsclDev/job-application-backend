@@ -11,6 +11,10 @@ import {
   HealthModule,
   MeetingModule,
 } from '@module';
+import {
+  ServeStaticModule,
+  ServeStaticModuleOptions,
+} from '@nestjs/serve-static';
 
 @Module({
   imports: [
@@ -52,6 +56,16 @@ import {
     ApplicationModule,
     FileModule,
     MeetingModule,
+    ServeStaticModule.forRootAsync({
+      useFactory: (config: ConfigService) =>
+        [
+          {
+            rootPath: config.file.tempData,
+            serveRoot: config.file.servePath,
+          },
+        ] as ServeStaticModuleOptions[],
+      inject: [ConfigService],
+    }),
   ],
   controllers: [],
 })

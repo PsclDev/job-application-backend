@@ -586,7 +586,7 @@
               "formdata": [
                 {
                   "key": "operations",
-                  "value": "{\n    \"query\": \"mutation ($groupId: String!, $applicationId: String!, $file: Upload!) { uploadFile(input: {groupId: $groupId applicationId: $applicationId },  file: $file) { id groupId applicationId name extension data size mime createdAt updatedAt}}\",\n    \"variables\": {\n    \"groupId\": \"{{group_id}}\",\n    \"applicationId\": \"{{application_id}}\",\n    \"file\": null\n    }\n}",
+                  "value": "{\n    \"query\": \"mutation ($applicationId: String!, $file: Upload!) { uploadFile(input: { applicationId: $applicationId },  file: $file) { id groupId applicationId name extension data size mime createdAt updatedAt}}\",\n    \"variables\": {\n    \"applicationId\": \"{{application_id}}\",\n    \"file\": null\n    }\n}",
                   "type": "text"
                 },
                 {

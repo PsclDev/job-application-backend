@@ -10,6 +10,7 @@ import { checkAffectedResult } from '@util/checkAffectedResult';
 import { excludeColumns } from '@util/excludeColumns';
 import { generateId } from '@util/generateId';
 import { prettyPrintObject } from '@util/prettyPrintObject';
+import { mkdirSync, existsSync, writeFileSync, unlinkSync } from 'fs';
 import { FileUpload } from 'graphql-upload';
 import * as path from 'path';
 import { FindManyOptions, Repository } from 'typeorm';
@@ -113,6 +114,32 @@ export class FileService {
     }
   }
 
+  async serve(id: string): Promise<string> {
+    try {
+      this.logger.log(`trying to serve file id ${id}`);
+      const file = await this.getById(id);
+
+      const directory = this.configServie.file.tempData;
+      const filename = `${file.name}${file.extension}`;
+      const filePath = `${directory}/${filename}`;
+      if (!existsSync(directory)) {
+        this.logger.log(`creating temp data directoy ${directory}`);
+        mkdirSync(directory);
+      }
+
+      this.logger.log(`creating temp file ${id}`);
+      writeFileSync(filePath, Buffer.from(file.data, 'base64'));
+
+      setTimeout(() => {
+        this.deleteTemp(id, filePath);
+      }, this.configServie.file.cacheTime);
+
+      return `${this.configServie.file.servePath}/${filename}`;
+    } catch (error) {
+      throw Error(`Failed to serve file with id ${id}`);
+    }
+  }
+
   async update(id: string, input: UpdateFileInput): Promise<FileEntity> {
     this.logger.log(`update file by id ${id}`);
     prettyPrintObject(this.logger, 'updateFileInput:', input);
@@ -130,5 +157,16 @@ export class FileService {
     checkAffectedResult(this.moduleName, res);
 
     return res.affected === 1;
+  }
+
+  async deleteTemp(id: string, filePath: string) {
+    try {
+      this.logger.log(`delete from temp data - file id ${id}`);
+      unlinkSync(filePath);
+    } catch (error) {
+      this.logger.debug(
+        `File ${id} could not be found and therefore not deleted`,
+      );
+    }
   }
 }
