@@ -48,8 +48,6 @@ export class CreatePersonInput
 
   @IsOptional()
   @IsEmail()
-  @MinLength(3)
-  @MaxLength(50)
   @Field()
   email: string;
 }

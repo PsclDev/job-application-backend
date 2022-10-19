@@ -8,6 +8,7 @@ import {
   IsOptional,
   IsString,
   Length,
+  MaxLength,
   MinLength,
   ValidateNested,
 } from 'class-validator';
@@ -53,6 +54,7 @@ export class CreateMeetingInput
 
   @IsString()
   @MinLength(3)
+  @MaxLength(50)
   @Field()
   title: string;
 

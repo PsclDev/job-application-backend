@@ -20,6 +20,7 @@ import {
   IsUrl,
   Length,
   MinLength,
+  MaxLength,
   ValidateNested,
 } from 'class-validator';
 
@@ -80,11 +81,13 @@ export class CreateApplicationInput
 
   @IsString()
   @MinLength(3)
+  @MaxLength(155)
   @Field()
   name: string;
 
   @IsString()
   @IsOptional()
+  @MaxLength(155)
   @Field(() => String)
   description = null;
 
