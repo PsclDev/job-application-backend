@@ -15,8 +15,13 @@ export class MeetingService {
     private readonly meetingRepo: Repository<MeetingEntity>,
   ) {}
 
+  async getAll(): Promise<MeetingEntity[]> {
+    this.logger.log('get all meetings');
+    return await this.meetingRepo.find();
+  }
+
   async getAllByApplicationId(applicationId: string): Promise<MeetingEntity[]> {
-    this.logger.log(`get meeting by application id ${applicationId}`);
+    this.logger.log(`get meetings by application id ${applicationId}`);
     return await this.meetingRepo.find({ where: { applicationId } });
   }
 

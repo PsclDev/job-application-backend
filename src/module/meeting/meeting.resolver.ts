@@ -14,7 +14,13 @@ export class MeetingResolver {
   constructor(private readonly meetingService: MeetingService) {}
 
   @Query(() => [MeetingType])
-  async meetings(
+  async meetings(): Promise<MeetingType[]> {
+    this.logger.debug(`get meetings all meetings}`);
+    return await this.meetingService.getAll();
+  }
+
+  @Query(() => [MeetingType])
+  async meetingsByApplicationId(
     @Args('applicationId') applicationId: string,
   ): Promise<MeetingType[]> {
     this.logger.debug(`get meetings by applicationId ${applicationId}`);

@@ -260,7 +260,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "mutation($groupId: String!) {\n    createApplication(\n        input: {\n            groupId: $groupId\n            name:\"Junior Engineer\"\n            description: \"test description\"\n            company: \"Apple Inc.\"\n            contact: {\n                name: \"John Doe\",\n                position: \"HR\"\n                email: \"hr@apple.com\"\n            }\n            jobUrl: \"https://apple.com/\"\n            status: {\n                state: \"PENDING\"\n                date: \"2022-08-17\"\n            }\n            isArchived: false\n        }\n    ) {\n        id\n        groupId\n        name\n        description\n        company\n        contact {\n            name\n            position\n            email\n        }\n        jobUrl\n        status {\n            state\n            date\n        }\n        meetings {\n            title\n            date\n            attendees {\n                name\n                position\n                email\n            }\n        }\n        notes\n        files {\n            name\n            size\n            mime\n        }\n        isArchived\n    }\n}",
+                "query": "mutation($groupId: String!) {\n    createApplication(\n        input: {\n            groupId: $groupId\n            name: \"Junior Engineer\"\n            description: \"test description\"\n            company: \"Apple Inc.\"\n            contact: {\n                name: \"John Doe\"\n                position: \"HR\"\n                email: \"hr@apple.com\"\n            }\n            jobUrl: \"https://apple.com/\"\n            status: {\n                state: \"PENDING\"\n                date: \"2022-08-17\"\n            }\n            isArchived: false\n        }\n    ) {\n        id\n        groupId\n        name\n        description\n        company\n        contact {\n            name\n            position\n            email\n        }\n        jobUrl\n        status {\n            state\n            date\n        }\n        meetings {\n            title\n            date\n            attendees {\n                name\n                position\n                email\n            }\n        }\n        notes\n        files {\n            name\n            size\n            mime\n        }\n        isArchived\n    }\n}",
                 "variables": "{\n    \"groupId\": \"{{group_id}}\"\n}"
               }
             },
@@ -372,15 +372,15 @@
       "name": "Meeting",
       "item": [
         {
-          "name": "By Id",
+          "name": "All",
           "request": {
             "method": "POST",
             "header": [],
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "query($id: String!) {\n    meeting(id: $id) {\n        id\n        applicationId\n        title\n        attendees {\n            name\n            position\n            email\n        }\n        notes\n    }\n}",
-                "variables": "{\n    \"id\": \"{{meeting_id}}\"\n}"
+                "query": "query {\n    meetings {\n        id\n        applicationId\n        title\n        attendees {\n            name\n            position\n            email\n        }\n        notes\n    }\n}",
+                "variables": ""
               }
             },
             "url": {
@@ -398,8 +398,27 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "query($applicationId: String!) {\n    meetings(applicationId: $applicationId) {\n        id\n        applicationId\n        title\n        attendees {\n            name\n            position\n            email\n        }\n        notes   \n    }\n}",
+                "query": "query($applicationId: String!) {\n    meetingsByApplicationId(applicationId: $applicationId) {\n        id\n        applicationId\n        title\n        attendees {\n            name\n            position\n            email\n        }\n        notes   \n    }\n}",
                 "variables": "{\n    \"applicationId\": \"{{application_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "By Id",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query($id: String!) {\n    meeting(id: $id) {\n        id\n        applicationId\n        title\n        attendees {\n            name\n            position\n            email\n        }\n        notes\n    }\n}",
+                "variables": "{\n    \"id\": \"{{meeting_id}}\"\n}"
               }
             },
             "url": {
@@ -555,6 +574,25 @@
               "graphql": {
                 "query": "query($id: String!) {\n    file(id: $id) {\n        id\n        groupId\n        applicationId\n        name\n        extension\n        size\n        mime\n        data\n    }\n}",
                 "variables": "{\n    \"id\": \"{{file_id}}\"\n}"
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}",
+              "host": ["{{base_url}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Serve",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query($id: String!) {\n    serveFile(id: $id)\n}",
+                "variables": "{\n    \"id\": \"{{global_file_id}}\"\n}"
               }
             },
             "url": {
