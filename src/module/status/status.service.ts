@@ -20,6 +20,8 @@ export class StatusService {
     application: ApplicationEntity,
     newStatus: StatusInterface,
   ): Promise<StatusEntity[]> {
+    if (!newStatus) return;
+
     this.logger.log(`update status for application id ${application.id}`);
     const status = await this.statusRepo.find({ application });
 
