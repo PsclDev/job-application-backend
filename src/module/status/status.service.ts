@@ -28,10 +28,7 @@ export class StatusService {
     if (!status)
       throw new NotFoundException('no status found by give application id');
 
-    if (status.find((x) => x.state === newStatus.state))
-      throw new NotFoundException(
-        `status already exists for given application, id ${application.id}`,
-      );
+    if (status.find((x) => x.state === newStatus.state)) return;
 
     status.push({
       id: generateId<StatusEntity>(this.statusRepo),

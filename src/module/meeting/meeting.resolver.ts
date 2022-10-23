@@ -50,6 +50,15 @@ export class MeetingResolver {
     return await this.meetingService.update(id, input);
   }
 
+  @Mutation(() => MeetingType)
+  async updateMeetingNotes(
+    @Args('id') id: string,
+    @Args('notes') notes: string,
+  ): Promise<MeetingType> {
+    this.logger.debug(`update meeting notes by id ${id}`);
+    return await this.meetingService.updateNotes(id, notes);
+  }
+
   @Mutation(() => Boolean)
   async deleteMeeting(@Args('id') id: string): Promise<boolean> {
     this.logger.debug(`delete meeting by id ${id}`);

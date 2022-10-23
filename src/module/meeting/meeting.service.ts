@@ -55,6 +55,17 @@ export class MeetingService {
 
     return await this.meetingRepo.findOne({ id });
   }
+
+  async updateNotes(id: string, notes: string): Promise<MeetingEntity> {
+    this.logger.log(`update meeting notes by id ${id}`);
+    prettyPrintObject(this.logger, 'updateMeetingInput:', notes);
+
+    const res = await this.meetingRepo.update({ id }, { notes });
+    checkAffectedResult(this.moduleName, res);
+
+    return await this.meetingRepo.findOne({ id });
+  }
+
   async delete(id: string): Promise<boolean> {
     this.logger.log(`delete meeting by id ${id}`);
 

@@ -85,11 +85,11 @@ export class CreateApplicationInput
   @Field()
   name: string;
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
   @MaxLength(155)
   @Field(() => String)
-  description;
+  description = null;
 
   @IsString()
   @MinLength(3)
@@ -118,10 +118,10 @@ export class CreateApplicationInput
   @Field(() => [CreateMeetingInput], { nullable: true })
   meetings: MeetingInterface[];
 
-  @IsOptional()
   @IsString()
+  @IsOptional()
   @Field(() => String)
-  notes;
+  notes = null;
 
   @IsOptional()
   @Type(() => CreateFileInput)
@@ -130,10 +130,10 @@ export class CreateApplicationInput
   @Field(() => [CreateFileInput], { nullable: true })
   files: FileInterface[];
 
-  @IsOptional()
   @IsBoolean()
+  @IsOptional()
   @Field(() => Boolean)
-  isArchived;
+  isArchived = false;
 }
 
 @InputType()

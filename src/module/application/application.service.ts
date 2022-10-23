@@ -83,6 +83,16 @@ export class ApplicationService {
     return await this.getById(id);
   }
 
+  async updateNotes(id: string, notes: string): Promise<ApplicationEntity> {
+    this.logger.log(`update application notes by id ${id}`);
+    prettyPrintObject(this.logger, 'updateApplicationInput:', notes);
+
+    const res = await this.applicationRepo.update(id, { notes });
+    checkAffectedResult(this.moduleName, res);
+
+    return await this.getById(id);
+  }
+
   async move(id: string, newGroupId: string): Promise<ApplicationEntity> {
     this.logger.log(`move application by id ${id} to group id ${newGroupId}`);
 

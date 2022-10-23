@@ -64,6 +64,15 @@ export class ApplicationResolver {
   }
 
   @Mutation(() => ApplicationType)
+  async updateApplicationNotes(
+    @Args('id') id: string,
+    @Args('notes') notes: string,
+  ): Promise<ApplicationType> {
+    this.logger.debug(`update application notes by id ${id}`);
+    return await this.applicationService.updateNotes(id, notes);
+  }
+
+  @Mutation(() => ApplicationType)
   async moveApplication(
     @Args('id') id: string,
     @Args('newGroupId') newGroupId: string,
