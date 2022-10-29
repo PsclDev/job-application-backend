@@ -89,7 +89,7 @@ export class CreateApplicationInput
   @IsOptional()
   @MaxLength(155)
   @Field(() => String)
-  description = null;
+  description;
 
   @IsString()
   @MinLength(3)
@@ -121,7 +121,7 @@ export class CreateApplicationInput
   @IsString()
   @IsOptional()
   @Field(() => String)
-  notes = null;
+  notes;
 
   @IsOptional()
   @Type(() => CreateFileInput)
@@ -133,7 +133,7 @@ export class CreateApplicationInput
   @IsBoolean()
   @IsOptional()
   @Field(() => Boolean)
-  isArchived = false;
+  isArchived;
 }
 
 @InputType()

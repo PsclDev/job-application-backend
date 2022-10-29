@@ -77,7 +77,9 @@ export class ApplicationResolver {
     @Args('id') id: string,
     @Args('newGroupId') newGroupId: string,
   ): Promise<ApplicationType> {
-    this.logger.debug(`update application by id ${id}`);
+    this.logger.debug(
+      `move application by id ${id} into new group id ${newGroupId}`,
+    );
     return await this.applicationService.move(id, newGroupId);
   }
 

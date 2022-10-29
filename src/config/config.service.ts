@@ -40,7 +40,8 @@ const CONFIG_SCHEMA = Joi.object().keys({
 
 @Injectable()
 export class ConfigService {
-  appVersion = process.env.npm_package_version || 'unkown';
+  appVersion =
+    process.env.app_version || process.env.npm_package_version || 'unkown';
   nodeEnv = process.env.NODE_ENV || 'prod';
   devMode = this.nodeEnv === 'dev' || this.nodeEnv === 'development';
   httpPort = Number(process.env.APP_PORT) || 3010;
