@@ -260,7 +260,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "mutation($groupId: String!) {\n    createApplication(\n        input: {\n            groupId: $groupId\n            name: \"Junior Engineer\"\n            description: \"test description\"\n            company: \"Apple Inc.\"\n            contact: {\n                name: \"John Doe\"\n                position: \"HR\"\n                email: \"hr@apple.com\"\n            }\n            jobUrl: \"https://apple.com/\"\n            status: {\n                state: \"PENDING\"\n                date: \"2022-08-17\"\n            }\n            isArchived: false\n        }\n    ) {\n        id\n        groupId\n        name\n        description\n        company\n        contact {\n            name\n            position\n            email\n        }\n        jobUrl\n        status {\n            state\n            date\n        }\n        meetings {\n            title\n            date\n            attendees {\n                name\n                position\n                email\n            }\n        }\n        notes\n        files {\n            name\n            size\n            mime\n        }\n        isArchived\n    }\n}",
+                "query": "mutation($groupId: String!) {\n    createApplication(\n        input: {\n            groupId: $groupId\n            name: \"Junior Engineer\"\n            description: \"test description\"\n            company: \"Apple Inc.\"\n            notes: \"\"\n            contact: {\n                name: \"John Doe\"\n                position: \"HR\"\n                email: \"hr@apple.com\"\n            }\n            jobUrl: \"https://apple.com/\"\n            status: {\n                state: \"PENDING\"\n                date: \"2022-08-17\"\n            }\n            isArchived: false\n        }\n    ) {\n        id\n        groupId\n        name\n        description\n        company\n        contact {\n            name\n            position\n            email\n        }\n        jobUrl\n        status {\n            state\n            date\n        }\n        meetings {\n            title\n            date\n            attendees {\n                name\n                position\n                email\n            }\n        }\n        notes\n        files {\n            name\n            size\n            mime\n        }\n        isArchived\n    }\n}",
                 "variables": "{\n    \"groupId\": \"{{group_id}}\"\n}"
               }
             },
@@ -379,7 +379,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "query {\n    meetings {\n        id\n        applicationId\n        title\n        attendees {\n            name\n            position\n            email\n        }\n        notes\n    }\n}",
+                "query": "query {\n    meetings {\n        id\n        applicationId\n        title\n        date\n        link\n        attendees {\n            name\n            position\n            email\n        }\n        notes\n    }\n}",
                 "variables": ""
               }
             },
@@ -398,7 +398,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "query($applicationId: String!) {\n    meetingsByApplicationId(applicationId: $applicationId) {\n        id\n        applicationId\n        title\n        attendees {\n            name\n            position\n            email\n        }\n        notes   \n    }\n}",
+                "query": "query($applicationId: String!) {\n    meetingsByApplicationId(applicationId: $applicationId) {\n        id\n        applicationId\n        title\n        link\n        attendees {\n            name\n            position\n            email\n        }\n        notes   \n    }\n}",
                 "variables": "{\n    \"applicationId\": \"{{application_id}}\"\n}"
               }
             },
@@ -417,7 +417,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "query($id: String!) {\n    meeting(id: $id) {\n        id\n        applicationId\n        title\n        attendees {\n            name\n            position\n            email\n        }\n        notes\n    }\n}",
+                "query": "query($id: String!) {\n    meeting(id: $id) {\n        id\n        applicationId\n        title\n        link\n        attendees {\n            name\n            position\n            email\n        }\n        notes\n    }\n}",
                 "variables": "{\n    \"id\": \"{{meeting_id}}\"\n}"
               }
             },
@@ -448,7 +448,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "mutation($applicationId: String!) {\n    createMeeting(\n        input: {\n            applicationId: $applicationId\n            title:\"Cool Meeting\"\n            date: \"2022-09-27T15:45:00Z\"\n            attendees: [{\n                name: \"Hans Jürgen\"\n                position: \"CEO\"\n                email: \"seher@hansi.com\"\n            },\n            {\n                name: \"Hannelore Peters\"\n                position: \"HR\"\n                email: \"lore@hanne.com\"\n            }]\n            link: \"https://google.com\"\n        }\n    ) {\n        id\n        applicationId\n        title\n        date\n        attendees {\n            name\n            position\n            email\n        }\n        notes    \n    }\n}",
+                "query": "mutation($applicationId: String!) {\n    createMeeting(\n        input: {\n            applicationId: $applicationId\n            title:\"Cool Meeting\"\n            date: \"2022-09-27T15:45:00Z\"\n            attendees: [{\n                name: \"Hans Jürgen\"\n                position: \"CEO\"\n                email: \"seher@hansi.com\"\n            },\n            {\n                name: \"Hannelore Peters\"\n                position: \"HR\"\n                email: \"lore@hanne.com\"\n            }]\n            link: \"https://google.com\"\n        }\n    ) {\n        id\n        applicationId\n        title\n        date\n        link\n        attendees {\n            name\n            position\n            email\n        }\n        notes    \n    }\n}",
                 "variables": "{\n    \"applicationId\": \"{{application_id}}\"\n}"
               }
             },
@@ -467,7 +467,7 @@
             "body": {
               "mode": "graphql",
               "graphql": {
-                "query": "mutation($id: String!) {\n    updateMeeting(\n        id: $id\n        input: {\n            title:\"New Meeting Title\",\n        }\n    ) {\n        id\n        applicationId\n        title\n        attendees {\n            name\n            position\n            email\n        }\n        notes   \n    }\n}",
+                "query": "mutation($id: String!) {\n    updateMeeting(\n        id: $id\n        input: {\n            title:\"New Meeting Title\",\n        }\n    ) {\n        id\n        applicationId\n        title\n        link\n        attendees {\n            name\n            position\n            email\n        }\n        notes   \n    }\n}",
                 "variables": "{\n    \"id\": \"{{meeting_id}}\"\n}"
               }
             },
