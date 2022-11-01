@@ -9,8 +9,6 @@ on: [push]
 # used in the build-package job
 env:
   APP_IS_RUNNING_IN_PIPELINE: true;
-  VERSION_AUTHOR: 'VersionMaster'
-  VERSION_EMAIL: 'vc@pscl.dev'
   # Slash is required
   PACKAGE_REGISTRY: 'ghrc.io/'
   PACKAGE_AUTHOR: 'pscldev/'
@@ -75,16 +73,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PIPELINE_PAT }}
 
-      - name: Update npm version 📈
-        if: steps.semantic.outputs.new_release_published == 'true'
-        run: |
-          git config --global user.name '$VERSION_AUTHOR'
-          git config --global user.email '$VERSION_EMAIL'
-          npm version ${{ steps.semantic.outputs.new_release_version }} --no-git-tag-version
-          git add .
-          git commit -m "Set new app version ${{ steps.semantic.outputs.new_release_version }}"
-          git push
-
       - name: Login to registry 🔐
         uses: docker/login-action@v1
         with:
@@ -100,3 +88,5 @@ jobs:
           context: './'
           file: './Dockerfile'
           tags: $PACKAGE_REGISTRY$PACKAGE_AUTHOR$PACKAGE_NAME:latest,$PACKAGE_REGISTRY$PACKAGE_AUTHOR$PACKAGE_NAME:${{ steps.semantic.outputs.new_release_version }}
+          build-args: |
+            DOCKER_TAG=${{ steps.semantic.outputs.new_release_version }}

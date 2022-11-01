@@ -40,8 +40,7 @@ const CONFIG_SCHEMA = Joi.object().keys({
 
 @Injectable()
 export class ConfigService {
-  appVersion =
-    process.env.app_version || process.env.npm_package_version || 'unkown';
+  appVersion = process.env.app_version || 'unkown';
   nodeEnv = process.env.NODE_ENV || 'prod';
   devMode = this.nodeEnv === 'dev' || this.nodeEnv === 'development';
   httpPort = Number(process.env.APP_PORT) || 3010;
@@ -65,7 +64,8 @@ export class ConfigService {
   file = {
     maxSize: calculatemaxSize(Number(process.env.APP_FILE_MAX_SIZE_IN_MB) || 1),
     allowedExtensions: generateAllowedFileExtensions(
-      process.env.APP_FILE_ALLOWED_EXTENSIONS,
+      process.env.APP_FILE_ALLOWED_EXTENSIONS ||
+        'csv,docx,key,numbers,pages,pdf',
     ),
     cacheTime: minutesToMilliseconds(
       Number(process.env.APP_FILE_CACHE_TIME_IN_MIN) || 15,

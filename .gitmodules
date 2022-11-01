@@ -1,3 +1,3 @@
 [submodule "shared"]
 	path = shared
-	url = git@github.com:PsclDev/JobApplicationShared.git
+	url = git@github.com:PsclDev/job-application-shared.git

@@ -26,6 +26,8 @@ RUN yarn build
 FROM node:18-alpine As production
 
 ARG NODE_ENV=production
+ARG DOCKER_TAG
+ENV app_version=$DOCKER_TAG
 
 WORKDIR /usr/src/app
 

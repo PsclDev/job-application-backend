@@ -11,7 +11,7 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/src/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "prepare": "husky install",
     "shell": "npm run shell:build && docker-compose -f docker-compose.shell.yml run --rm -u 1000 --name job-application --service-ports job-application bash || true && echo Stopping environment... && docker-compose -f docker-compose.shell.yml down",
