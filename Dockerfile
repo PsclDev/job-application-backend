@@ -1,50 +1,34 @@
-FROM node:18-alpine AS development
-
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-
-RUN apk update && apk add --no-cache nmap && \
-    echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
-    echo @edge http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories && \
-    apk update
-
-RUN apk add --no-cache --virtual .gyp \
-        python3 \
-        make \
-        g++
-
-COPY package.json .
-COPY yarn.lock .
-
-RUN yarn install
-
-COPY . .
-
-RUN yarn prebuild
-RUN yarn build
-
-FROM node:18-alpine As production
-
-ARG NODE_ENV=production
-ARG DOCKER_TAG
-ENV app_version=$DOCKER_TAG
+FROM node:18-alpine As development
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN apk update && apk add --no-cache nmap && \
-    echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
-    echo @edge http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories && \
-    apk update
+RUN yarn install --frozen-lockfile
 
-RUN apk add --no-cache --virtual .gyp \
-      python3 \
-      make \
-      g++
+COPY . .
 
-RUN yarn install --production
 
-COPY --from=development /usr/src/app/dist ./dist
+FROM node:18-alpine As build
 
-CMD ["yarn", "start:prod"]
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+COPY --from=development /usr/src/app/node_modules ./node_modules
+
+COPY . .
+
+RUN yarn build
+
+ENV NODE_ENV production
+
+RUN yarn --production && yarn cache clean --all
+
+
+FROM node:18-alpine As production
+
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/dist ./dist
+
+CMD [ "node", "dist/src/main.js" ]

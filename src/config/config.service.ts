@@ -25,10 +25,6 @@ const CONFIG_SCHEMA = Joi.object().keys({
     migrationsPath: Joi.string().optional(),
     logging: Joi.bool().optional(),
   }),
-  useCache: Joi.bool().optional(),
-  cacheOptions: Joi.object().keys({
-    ttl: Joi.number().integer().greater(0).required(),
-  }),
   file: Joi.object().keys({
     maxSize: Joi.number().integer().greater(0).required(),
     allowedExtensions: Joi.array().items(Joi.string()).required(),
@@ -56,10 +52,6 @@ export class ConfigService {
     migrationsRun: bool(process.env.APP_RUN_MIGRATIONS) || true,
     migrationsPath: process.env.APP_MIGRATIONS_PATH || 'dist/migrations/*.js',
     logging: bool(process.env.APP_DB_LOGGING) || false,
-  };
-  useCache = bool(process.env.APP_USE_CACHE) || false;
-  cacheOptions = {
-    ttl: Number(process.env.APP_CACHE_TTL) || 60 * 60, //1 hour
   };
   file = {
     maxSize: calculatemaxSize(Number(process.env.APP_FILE_MAX_SIZE_IN_MB) || 1),

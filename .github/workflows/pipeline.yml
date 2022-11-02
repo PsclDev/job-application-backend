@@ -8,7 +8,6 @@ on: [push]
 # called 'PIPELINE_PAT'
 # used in the build-package job
 env:
-  APP_IS_RUNNING_IN_PIPELINE: true;
   # Slash is required
   PACKAGE_REGISTRY: 'ghrc.io/'
   PACKAGE_AUTHOR: 'pscldev/'
