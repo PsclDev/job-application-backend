@@ -8,10 +8,9 @@ on: [push]
 # called 'PIPELINE_PAT'
 # used in the build-package job
 env:
-  # Slash is required
-  PACKAGE_REGISTRY: 'ghrc.io/'
-  PACKAGE_AUTHOR: 'pscldev/'
-  PACKAGE_NAME: 'job-application/backend'
+  PACKAGE_REGISTRY: 'ghrc.io'
+  PACKAGE_AUTHOR: 'pscldev'
+  PACKAGE_NAME: 'job-application-backend'
 
 jobs:
   build-lint-and-test:
@@ -25,20 +24,22 @@ jobs:
     steps:
       - name: Checkout 🛎
         uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Setup node env 🏗
-        uses: actions/setup-node@v2.1.5
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
           check-latest: true
 
       - name: Get yarn cache directory path 🛠
         id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
       - name: Cache node_modules 📦
         if: steps.yarn-cache.outputs.cache-hit != 'true'
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v3
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -60,6 +61,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Semantic release
         uses: cycjimmy/semantic-release-action@v3
@@ -70,9 +73,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PIPELINE_PAT }}
 
       - name: Login to registry 🔐
-        uses: docker/login-action@v1
+        if: steps.semantic.outputs.new_release_published == 'true'
+        uses: docker/login-action@v2
         with:
-          registry: ghcr.io
+          registry: ${{ env.PACKAGE_REGISTRY }}
           username: ${{ github.ACTOR }}
           password: ${{ secrets.PIPELINE_PAT }}
 
@@ -83,6 +87,6 @@ jobs:
           push: true
           context: './'
           file: './Dockerfile'
-          tags: $PACKAGE_REGISTRY$PACKAGE_AUTHOR$PACKAGE_NAME:latest,$PACKAGE_REGISTRY$PACKAGE_AUTHOR$PACKAGE_NAME:${{ steps.semantic.outputs.new_release_version }}
+          tags: ${{ env.PACKAGE_REGISTRY }}/&${{ env.PACKAGE_AUTHOR }}/${{ env.PACKAGE_NAME }}:latest,${{ env.PACKAGE_REGISTRY }}/${{ env.PACKAGE_AUTHOR }}/${{ env.PACKAGE_NAME }}:${{ steps.semantic.outputs.new_release_version }}
           build-args: |
             DOCKER_TAG=${{ steps.semantic.outputs.new_release_version }}
