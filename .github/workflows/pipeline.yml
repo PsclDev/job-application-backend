@@ -52,9 +52,6 @@ jobs:
       - name: Run linter 👀
         run: yarn lint
 
-      - name: Run tests 🧪
-        run: yarn test --passWithNoTests
-
   build-package:
     if: github.ref == 'refs/heads/master'
     needs: [build-lint-and-test]
