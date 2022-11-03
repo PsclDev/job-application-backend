@@ -8,9 +8,9 @@ on: [push]
 # called 'PIPELINE_PAT'
 # used in the build-package job
 env:
-  PACKAGE_REGISTRY: 'ghcr.io/'
-  PACKAGE_AUTHOR: 'pscldev'
-  PACKAGE_NAME: '/job-application/backend'
+  PACKAGE_REGISTRY: 'ghcr.io/' #slash required
+  PACKAGE_AUTHOR: 'pscldev' #w/o slash
+  PACKAGE_NAME: '/job-application/backend' # starting slash required
 
 jobs:
   build-and-lint:
