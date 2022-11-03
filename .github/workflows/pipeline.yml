@@ -10,7 +10,7 @@ on: [push]
 env:
   PACKAGE_REGISTRY: 'ghrc.io'
   PACKAGE_AUTHOR: 'pscldev'
-  PACKAGE_NAME: 'job-application-backend'
+  PACKAGE_NAME: 'job-application-backend-test'
 
 jobs:
   build-lint-and-test:
@@ -87,6 +87,6 @@ jobs:
           push: true
           context: './'
           file: './Dockerfile'
-          tags: ${{ env.PACKAGE_REGISTRY }}/&${{ env.PACKAGE_AUTHOR }}/${{ env.PACKAGE_NAME }}:latest,${{ env.PACKAGE_REGISTRY }}/${{ env.PACKAGE_AUTHOR }}/${{ env.PACKAGE_NAME }}:${{ steps.semantic.outputs.new_release_version }}
+          tags: ${{ env.PACKAGE_REGISTRY }}/${{ env.PACKAGE_AUTHOR }}/${{ env.PACKAGE_NAME }}:latest,${{ env.PACKAGE_REGISTRY }}/${{ env.PACKAGE_AUTHOR }}/${{ env.PACKAGE_NAME }}:${{ steps.semantic.outputs.new_release_version }}
           build-args: |
             DOCKER_TAG=${{ steps.semantic.outputs.new_release_version }}
