@@ -72,17 +72,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PIPELINE_PAT }}
 
+      - name: Set up Docker Buildx
+        if: steps.semantic.outputs.new_release_published == 'true'
+        uses: docker/setup-buildx-action@v2
+
       - name: Login to registry 🔐
         if: steps.semantic.outputs.new_release_published == 'true'
         uses: docker/login-action@v2
         with:
-          registry: ${{ env.PACKAGE_REGISTRY }}
-          username: ${{ github.ACTOR }}
+          registry: ghcr.io
+          username: pscldev
           password: ${{ secrets.PIPELINE_PAT }}
 
       - name: Backend - Build and push image 🚀
         if: steps.semantic.outputs.new_release_published == 'true'
-        uses: docker/build-push-action@v3
+        uses: docker/@v3
         with:
           push: true
           context: './'
